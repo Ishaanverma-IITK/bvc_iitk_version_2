@@ -36,9 +36,8 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const HERO_BG = "https://bvciitk.com/images/hero-bg.jpg";
-const HERO_FALLBACK =
-  "https://bvciitk.com/images/gallery/janmashtami/1.jpg";
+const HERO_BG = "https://bvciitk.com/img/Kirtan.jpg";
+const HERO_FALLBACK = "https://bvciitk.com/images/cover_darker.jpg";
 
 const philosophyItems = [
   {
@@ -67,7 +66,7 @@ const events = [
   {
     title: "Janmashtami Festival",
     tag: "Annual Flagship",
-    image: "https://bvciitk.com/images/gallery/janmashtami/1.jpg",
+    image: "https://bvciitk.com/images/portfolio/Janmashtami%20(1).jpg",
     body: "1000+ visitors, cultural performances, kirtan, interschool competitions, and free prasadam dinner across the campus.",
     href: "/events",
     icon: Music,
@@ -75,7 +74,7 @@ const events = [
   {
     title: "Gitanushilanam",
     tag: "Gita Competition",
-    image: "https://bvciitk.com/images/gallery/gita/1.jpg",
+    image: "https://bvciitk.com/images/portfolio/Bhagavad%20Gita%20Lecture%20Series%20(1).jpg",
     body: "Annual Bhagavad Gita competition — quizzes, shloka recitations, essays, and awards for students across India.",
     href: "/gitanushilanam",
     icon: BookOpen,
@@ -83,7 +82,7 @@ const events = [
   {
     title: "Gita Jayanti & Radhastami",
     tag: "Signature Festivals",
-    image: "https://bvciitk.com/images/gallery/radhastami/1.jpg",
+    image: "https://bvciitk.com/images/portfolio/Spiritual%20Retreats%20(1)%20(1)%20(1).jpg",
     body: "Special festival celebrations — mass Gita recitation, abhishek, kirtan, and community feast.",
     href: "/events",
     icon: Award,

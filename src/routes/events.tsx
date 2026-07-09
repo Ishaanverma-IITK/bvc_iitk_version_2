@@ -25,37 +25,37 @@ const events = [
   {
     title: "Janmashtami Festival",
     date: "Aug – Sep · Annual",
-    image: "https://bvciitk.com/images/gallery/janmashtami/1.jpg",
+    image: "https://bvciitk.com/images/portfolio/Janmashtami%20(1).jpg",
     body: "The flagship celebration of BVC — cultural performances, dance, drama, kirtan, dioramas, and free prasadam dinner for 1000+ visitors.",
   },
   {
     title: "Gitanushilanam",
     date: "Yearly · National",
-    image: "https://bvciitk.com/images/gallery/gita/1.jpg",
+    image: "https://bvciitk.com/images/portfolio/Bhagavad%20Gita%20Lecture%20Series%20(1).jpg",
     body: "Pan-India Bhagavad Gita competition — quiz rounds, shloka recitation, essays, and awards for participating students.",
   },
   {
     title: "Radhastami",
     date: "September",
-    image: "https://bvciitk.com/images/gallery/radhastami/1.jpg",
+    image: "https://bvciitk.com/img/Garland.jpg",
     body: "Appearance day of Srimati Radharani — Abhishek ceremony, melodious kirtan, and a community feast.",
   },
   {
     title: "Gita Jayanti",
     date: "December",
-    image: "https://bvciitk.com/images/gallery/gita/2.jpg",
+    image: "https://bvciitk.com/images/portfolio/Leading%20Edge%20Research.jpg",
     body: "Mass Bhagavad Gita recitation, book distribution, and lectures decoding Krishna's message to Arjuna.",
   },
   {
     title: "Winter Bootcamp",
     date: "December – January",
-    image: "https://bvciitk.com/images/gallery/bootcamp/1.jpg",
+    image: "https://bvciitk.com/images/portfolio/Personality%20Development%20(1).jpg",
     body: "A residential Vedic bootcamp — intensive study, meditation, kirtan, and mentorship over the winter break.",
   },
   {
     title: "Weekly Japa & Gita Class",
     date: "Every Sunday · SAC",
-    image: "https://bvciitk.com/images/gallery/japa/1.jpg",
+    image: "https://bvciitk.com/images/portfolio/Spiritual%20Retreats%20(1)%20(1)%20(1).jpg",
     body: "Weekly mantra meditation, Bhagavad Gita lecture, and community prasadam — open to the entire campus.",
   },
 ];
