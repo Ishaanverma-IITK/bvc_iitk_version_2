@@ -19,16 +19,16 @@ import { Reveal } from "../components/Reveal";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "BVC IIT Kanpur — Bridging Science and Spirituality" },
+      { title: "test_project" },
       {
         name: "description",
         content:
-          "The Bhaktivedanta Club at IIT Kanpur unites scientific inquiry with the timeless wisdom of the Bhagavad Gita. Join mantra meditation, Gita study, and Janmashtami.",
+          "BVCIITK Website Insights analyzes the bvciitk.github.io repository and its live website.",
       },
-      { property: "og:title", content: "BVC IIT Kanpur — Where Science Meets Spirituality" },
+      { property: "og:title", content: "test_project" },
       {
         property: "og:description",
-        content: "Discover inner peace, holistic living, and Vedic wisdom at IIT Kanpur.",
+        content: "BVCIITK Website Insights analyzes the bvciitk.github.io repository and its live website.",
       },
       { property: "og:image", content: "https://bvciitk.com/images/cover.jpg" },
     ],

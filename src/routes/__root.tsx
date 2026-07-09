@@ -79,20 +79,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "BVC IIT Kanpur — Bridging Science and Spirituality" },
+      { title: "test_project" },
       {
         name: "description",
         content:
-          "Bhaktivedanta Club, IIT Kanpur — bridging scientific inquiry with Vedic wisdom through mantra meditation, Bhagavad Gita study, and holistic student life.",
+          "BVCIITK Website Insights analyzes the bvciitk.github.io repository and its live website.",
       },
       { name: "author", content: "Bhaktivedanta Club IIT Kanpur" },
-      { property: "og:title", content: "BVC IIT Kanpur — Where Science Meets Spirituality" },
+      { property: "og:title", content: "test_project" },
       {
         property: "og:description",
-        content: "Discover inner peace, holistic living, and the timeless wisdom of the Bhagavad Gita at IIT Kanpur.",
+        content: "BVCIITK Website Insights analyzes the bvciitk.github.io repository and its live website.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "test_project" },
+      { name: "twitter:description", content: "BVCIITK Website Insights analyzes the bvciitk.github.io repository and its live website." },
+      { property: "og:image", content: "https://bvciitk.com/images/cover.jpg" },
+      { name: "twitter:image", content: "https://bvciitk.com/images/cover.jpg" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
