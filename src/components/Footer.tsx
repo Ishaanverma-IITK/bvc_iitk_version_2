@@ -43,7 +43,7 @@ export function Footer() {
               aria-label="YouTube"
               className="grid h-11 w-11 place-items-center rounded-full border border-white/15 hover:bg-saffron hover:border-saffron transition"
             >
-              <Youtube size={18} />
+              <YoutubeIcon />
             </a>
             <a
               href="https://www.instagram.com/bvc_iitk/"
@@ -52,7 +52,7 @@ export function Footer() {
               aria-label="Instagram"
               className="grid h-11 w-11 place-items-center rounded-full border border-white/15 hover:bg-saffron hover:border-saffron transition"
             >
-              <Instagram size={18} />
+              <InstagramIcon />
             </a>
             <a
               href="https://github.com/bvciitk"
@@ -61,7 +61,7 @@ export function Footer() {
               aria-label="GitHub"
               className="grid h-11 w-11 place-items-center rounded-full border border-white/15 hover:bg-saffron hover:border-saffron transition"
             >
-              <Github size={18} />
+              <GithubIcon />
             </a>
           </div>
         </div>
