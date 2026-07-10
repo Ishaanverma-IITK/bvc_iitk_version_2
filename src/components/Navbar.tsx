@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import bvcLogo from "@/assets/bvc-logo.png.asset.json";
+import bvcLogo from "@/assets/bvc-logo.png";
 
 
 
@@ -18,6 +18,9 @@ const links = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+  const isDarkNavbar = isHome && !scrolled;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -37,12 +40,14 @@ export function Navbar() {
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <Link to="/" className="flex items-center gap-2 group">
           <img
-            src={bvcLogo.url}
+            src={bvcLogo}
             alt="BVC IIT Kanpur"
             className="h-11 w-11 shrink-0 rounded-full bg-white object-contain shadow-glow ring-1 ring-saffron/30"
           />
 
-          <span className="font-display text-lg font-bold tracking-tight text-foreground">
+          <span className={`font-display text-lg font-bold tracking-tight transition-colors ${
+            isDarkNavbar ? "text-cream" : "text-foreground"
+          }`}>
             BVC <span className="text-saffron">IITK</span>
           </span>
         </Link>
@@ -53,7 +58,11 @@ export function Navbar() {
               <Link
                 to={l.to}
                 hash={"hash" in l ? l.hash : undefined}
-                className="px-3 py-2 text-sm font-medium text-foreground/80 hover:text-saffron transition-colors relative after:absolute after:left-3 after:right-3 after:bottom-1 after:h-0.5 after:origin-left after:scale-x-0 after:bg-saffron after:transition-transform hover:after:scale-x-100"
+                className={`px-3 py-2 text-sm font-medium transition-colors relative after:absolute after:left-3 after:right-3 after:bottom-1 after:h-0.5 after:origin-left after:scale-x-0 after:bg-saffron after:transition-transform hover:after:scale-x-100 ${
+                  isDarkNavbar
+                    ? "text-cream/90 hover:text-saffron"
+                    : "text-foreground/80 hover:text-saffron"
+                }`}
               >
                 {l.label}
               </Link>
@@ -73,7 +82,11 @@ export function Navbar() {
         <button
           onClick={() => setOpen((v) => !v)}
           aria-label={open ? "Close menu" : "Open menu"}
-          className="lg:hidden inline-flex h-11 w-11 items-center justify-center rounded-full bg-background/80 backdrop-blur border border-border text-foreground"
+          className={`lg:hidden inline-flex h-11 w-11 items-center justify-center rounded-full border transition-all ${
+            isDarkNavbar
+              ? "bg-transparent border-cream/20 text-cream hover:bg-cream/10"
+              : "bg-background/80 backdrop-blur border-border text-foreground hover:bg-accent"
+          }`}
         >
           {open ? <X size={20} /> : <Menu size={20} />}
         </button>

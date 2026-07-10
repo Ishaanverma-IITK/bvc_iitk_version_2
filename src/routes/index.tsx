@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import {
   Brain,
   Sparkles,
@@ -11,6 +12,7 @@ import {
   ArrowRight,
   ChevronRight,
   GraduationCap,
+  X,
 } from "lucide-react";
 import { Reveal } from "../components/Reveal";
 
@@ -95,58 +97,80 @@ const alumni = [
     degree: "B.Tech, EE (1999–2003)",
     now: "Ex-Goldman Sachs, USA & Singapore",
     photo: "https://bvciitk.com/images/profile/Harikeshwar%20Kushwaha.jpg",
+    about: "Harikeshwar Kushwaha is B-Tech (Department of Electrical Engineering, 1999-2003) from IIT Kanpur. He came in contact with Bhaktivedanta Club, IIT Kanpur in first year itself and has been practicing the path of Devotional Service since his days in IIT Kanpur. He has worked for Goldman Sachs in USA and Singapore for almost 9 years . He later left his lucrative job to serve full time to The Bhaktivedanta Gurukula and International School(BGIS) - a boarding school for boys as Principal for five years. Currently he runs a centre called ISKCON PEACE (Prayag Eternal Abode of Culture & Education) in Prayagraj where many people come to learn the art of devotional service to Krishna and make their lives joyful with spiritual culture and education"
   },
   {
     name: "Dr. Pawan Goyal",
     degree: "B.Tech, EE (2003–07)",
     now: "Associate Professor, CSE, IIT Kharagpur",
     photo: "https://bvciitk.com/images/profile/pawan.jpg",
+    about: "Dr. Pawan Goyal did his B-Tech from IIT Kanpur in 2003 in department of Electrical Engineering and was one of the toppers in his batch. He was connected to Bhaktivedanta Club from first year itself and took part in all the club activities. He did his Ph.D in Computational Linguistics at University of Ulster, under supervision of Professor Laxmidhar Behera and Prof. T. M. McGinnity. Now he is the youngest associate professor in CSE Department at IIT Kharagpur working in the field of Text Mining, Natural Language Processing, Information Retrieval and Sanskrit Computational Linguistics. He is one of the best researchers of India and has received many prestigious awards such as Google India AI/ML Research Awards 2020, INAE Young Engineer Awards 2020, Facebook AI and Ethics Research Award India, 2019. Besides all these achivements, he practices spirituality very seriously and is a very humble and generous person."
   },
   {
     name: "Dr. Ranjan Behera",
     degree: "M.Tech, Ph.D, EE (2001–09)",
     now: "Associate Professor, EE, IIT Patna",
     photo: "https://bvciitk.com/images/profile/ranjan.png",
+    about: "Dr. Ranjan Kumar Behera is an Associate Professor, Department of Electrical Engineering, IIT Patna, working since May 2009. He received the M. Tech. and Ph.D. degrees from IIT Kanpur, in 2003, and 2009, respectively. He has published 45 papers/articles in international journal and conferences and is a senior IEEE member. He got young scientist award by Department of Science and Technology, Government of India in 2011. In 2014, he was selected for prestigious Bhaskar Advanced Solar Energy (BASE-2014) fellowship award by Department of Science and Technology, Govt. of India and Indo-US science and technology Forum for doing advanced research on Solar Grid Integration in Smart Grid at Tennessee Technological University, Cookeville, TN, USA. Besides all these professional achievements Since 2008, he is leading a student community in IIT Patna for social and spiritual welfare for institute fraternity named as Bhaktivedanta club. Through this club, many students got their way for leading a successful life while serving the society. Not only students but the many people from outside the college got benefitted by the welfare activity like food distribution program, free education program, and old age care program. Recently grain distribution program in villages during pandemic had supported many families. Currently he is helping the village School students by providing them free computer education program. He is often invited by many national reputed engineering institute for delivering the motivational talks on spirituality and Bhagavad Gita . He is a practitioner of Bhakti yoga based on teachings of Bhagavad Gita since last 20 years and having a vast experience of counseling the students for their psychological and life problems."
   },
   {
     name: "Dr. Akhaya Nayak",
     degree: "Ph.D, HSS Sociology (2007–13)",
     now: "Assistant Professor, HSS, IIM Indore",
     photo: "https://bvciitk.com/images/profile/akahaya.jpg",
+    about: "Dr. Akhaya Kumar Nayak did his PhD in Sociology from IIT Kanpur in 2013. He is currently a faculty member at IIM Indore."
   },
   {
     name: "Dr. Tharun Reddy",
     degree: "B.Tech, M.Tech, Ph.D, EE (2009–20)",
     now: "Assistant Professor, EE, IIT Roorkee",
     photo: "https://bvciitk.com/images/profile/tharun.jpg",
+    about: "Dr. Tharun Reddy completed his B.tech + M.tech dual degree, and Ph.D. from EE department at IIT Kanpur. Currently, he is working as an Assistant Professor in the Electrical Engineering Department at IIT Roorkee. He is a devotee of the club."
   },
   {
     name: "Dr. Jayant Mohanta",
     degree: "Postdoc, EE (2018–20)",
     now: "Assistant Professor, ME, IIT Jodhpur",
     photo: "https://bvciitk.com/images/profile/jayanta.jpg",
+    about: "Dr. Jayant Kumar Mohanta did his B-Tech in department of Mechanical Engineering at IIT Indore from 2010-14 and later completed his P.h.D in just 4 years from IIT Indore. He than came to IIT Kanpur for Post-doc in Robotics under Prof. Laxmidhar Behera and worked on various interesting projects . He is currently an assistant professor at IIT Jodhpur in the ME Department. He got connected to the teachings of Bhagavad during his undergraduate days and is now very expert to teach that science in a very interesting and thoughtful manner."
   },
   {
     name: "Radhakant Das",
     degree: "B.Tech AE + M.Tech IME (2001–09)",
     now: "Chief Administrative Officer, BGIS, Vrindavan",
     photo: "https://bvciitk.com/images/profile/radhakant.jpg",
+    about: "Rohit Dasrapuria aka Radhakant Das is a motivational speaker and B-Tech and M-Tech (Department of Aerospace Engineering, 2001 batch) from IIT Kanpur. He was exceptional in his academic life ending up being a Silver Medalist at IIT Kanpur and working with leading organizations such as National Instruments. He left the lucrative job in 2009 to serve full time to The Bhaktivedanta Gurukula and International School(BGIS) - a boarding school for boys . He is currently the Chief Administrative Officer (CAO) of BGIS and has played a key role in establishing the new campus covering over 100 acres and equipped with all modern amenities, located in the beautiful holy land of Sri Vrindavan Dham, the abode of Lord Sri Krishna.. It offers the best of both worlds - traditional alongside modern education. He is a visiting faculty at IMS, Noida, and gives talks on Bhagavad Gita in ISKCON centers across the world."
   },
   {
     name: "Venkat Buddhiraju",
     degree: "Ph.D, Chem. Engg (2012–16)",
     now: "Senior Research Scientist, TCS",
     photo: "https://bvciitk.com/images/profile/venkat.png",
+    about: "Dr. Venkata Buddhiraju completed his PhD in Chemical Engineering from IIT Kanpur. He works as a Senior Research Scientist at TCS."
   },
   {
     name: "Dr. Suvendu Samanta",
     degree: "M.Tech, EE (2011–13)",
     now: "Assistant Professor, EE, IIT Kanpur",
     photo: "https://bvciitk.com/images/profile/Dr.%20Suvendu%20Samanta.jpg",
+    about: "Dr. Suvendu Samanta completed his M.Tech in Electrical Engineering at IIT Kanpur and later joined the institute as an Assistant Professor in the EE department."
   },
 ];
 
 function Home() {
+  const [selectedAlumnus, setSelectedAlumnus] = useState<typeof alumni[0] | null>(null);
+
+  useEffect(() => {
+    if (selectedAlumnus) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selectedAlumnus]);
+
   return (
 
     <>
@@ -159,7 +183,7 @@ function Home() {
             alt="Kirtan at IIT Kanpur"
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-navy/90 via-navy/70 to-navy/60" />
+          <div className="absolute inset-0 bg-gradient-to-br from-navy/95 via-navy/85 to-navy/75" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,153,51,0.25),transparent_50%)]" />
         </div>
 
@@ -350,7 +374,10 @@ function Home() {
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {alumni.map((a, i) => (
                 <Reveal key={a.name} delay={i * 0.04}>
-                  <div className="hover-lift flex gap-4 rounded-2xl bg-card border border-border p-5">
+                  <div
+                    onClick={() => setSelectedAlumnus(a)}
+                    className="hover-lift flex gap-4 rounded-2xl bg-card border border-border p-5 cursor-pointer hover:border-saffron/40 transition-colors h-full"
+                  >
                     <img
                       src={a.photo}
                       alt={a.name}
@@ -360,7 +387,7 @@ function Home() {
                       }}
                       className="h-16 w-16 shrink-0 rounded-full object-cover bg-muted"
                     />
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1">
                       <h3 className="font-semibold text-foreground truncate">{a.name}</h3>
                       <p className="text-xs text-muted-foreground mt-1">{a.degree}</p>
                       <p className="text-xs text-saffron font-semibold mt-1.5">{a.now}</p>
@@ -413,6 +440,58 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {/* Modal Detail Overlay */}
+      {selectedAlumnus && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65 backdrop-blur-sm transition-all duration-300"
+          onClick={() => setSelectedAlumnus(null)}
+        >
+          <div
+            className="relative w-full max-w-2xl bg-card border border-border rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col md:flex-row gap-6 max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setSelectedAlumnus(null)}
+              className="absolute top-4 right-4 p-2 rounded-full border border-border bg-background text-muted-foreground hover:text-foreground transition hover:bg-accent cursor-pointer"
+              aria-label="Close modal"
+            >
+              <X size={18} />
+            </button>
+
+            <img
+              src={selectedAlumnus.photo}
+              alt={selectedAlumnus.name}
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = "none";
+              }}
+              className="h-32 w-32 md:h-40 md:w-40 rounded-2xl object-cover bg-muted border border-border shrink-0 self-center md:self-start"
+            />
+
+            <div className="flex-1 min-w-0">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-saffron bg-saffron/10 px-2.5 py-1 rounded-full">
+                Alumnus Detail
+              </span>
+              <h2 className="font-display text-3xl font-bold mt-3 text-foreground leading-snug">
+                {selectedAlumnus.name}
+              </h2>
+              <p className="text-sm font-medium text-muted-foreground mt-2">
+                {selectedAlumnus.degree}
+              </p>
+              <p className="text-sm font-semibold text-saffron mt-1.5">
+                {selectedAlumnus.now}
+              </p>
+              
+              <div className="border-t border-border mt-5 pt-5">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">About & BVC Days</h4>
+                <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">
+                  {selectedAlumnus.about || "No detailed description available."}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

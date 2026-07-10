@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { MapPin, Mail } from "lucide-react";
-import bvcLogo from "@/assets/bvc-logo.png.asset.json";
+import bvcLogo from "@/assets/bvc-logo.png";
 
 
 const YoutubeIcon = (p: React.SVGProps<SVGSVGElement>) => (
@@ -27,7 +27,7 @@ export function Footer() {
         <div className="md:col-span-2">
           <div className="flex items-center gap-2">
             <img
-              src={bvcLogo.url}
+              src={bvcLogo}
               alt="BVC IIT Kanpur"
               className="h-11 w-11 rounded-full bg-white object-contain ring-1 ring-saffron/30"
             />
