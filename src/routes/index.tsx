@@ -10,11 +10,10 @@ import {
   Award,
   ArrowRight,
   ChevronRight,
-  Users,
   GraduationCap,
 } from "lucide-react";
-import { useState } from "react";
 import { Reveal } from "../components/Reveal";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
