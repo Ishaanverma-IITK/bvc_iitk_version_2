@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import bvcLogo from "@/assets/bvc-logo.png.asset.json";
+
+
 
 const links = [
   { label: "About", to: "/", hash: "about" },
@@ -33,9 +36,12 @@ export function Navbar() {
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <Link to="/" className="flex items-center gap-2 group">
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-saffron to-saffron-deep text-primary-foreground font-display text-lg font-bold shadow-glow">
-            ॐ
-          </span>
+          <img
+            src={bvcLogo.url}
+            alt="BVC IIT Kanpur"
+            className="h-11 w-11 shrink-0 rounded-full bg-white object-contain shadow-glow ring-1 ring-saffron/30"
+          />
+
           <span className="font-display text-lg font-bold tracking-tight text-foreground">
             BVC <span className="text-saffron">IITK</span>
           </span>
