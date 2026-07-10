@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { MapPin, Mail } from "lucide-react";
+import bvcLogo from "@/assets/bvc-logo.png.asset.json";
+
 
 const YoutubeIcon = (p: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" {...p}>
@@ -24,9 +26,12 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 grid gap-10 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2">
-            <span className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-saffron to-saffron-deep font-display text-lg font-bold text-primary-foreground">
-              ॐ
-            </span>
+            <img
+              src={bvcLogo.url}
+              alt="BVC IIT Kanpur"
+              className="h-11 w-11 rounded-full bg-white object-contain ring-1 ring-saffron/30"
+            />
+
             <span className="font-display text-xl font-bold">
               Bhaktivedanta Club <span className="text-saffron">IITK</span>
             </span>
