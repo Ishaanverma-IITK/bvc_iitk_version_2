@@ -111,10 +111,37 @@
 @layer base {
   * {
     border-color: var(--color-border);
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--color-foreground) 20%, transparent) transparent;
   }
 
   html {
     scroll-behavior: smooth;
+    overflow-y: overlay;
+    background-color: var(--color-background);
+  }
+
+  /* Custom Webkit scrollbar styling for all elements */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, var(--color-foreground) 25%, transparent);
+    border-radius: 9999px;
+    border: 2.5px solid transparent;
+    background-clip: padding-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-saffron);
+    border: 2.5px solid transparent;
+    background-clip: padding-box;
   }
 
   body {
