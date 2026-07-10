@@ -88,16 +88,6 @@ const events = [
   },
 ];
 
-const teamMembers = [
-  { name: "Aarav Sharma", year: "B.Tech Y4", dept: "Computer Science", role: "President" },
-  { name: "Priya Verma", year: "M.Tech Y2", dept: "Electrical Engg", role: "Vice President" },
-  { name: "Rohan Iyer", year: "B.Tech Y3", dept: "Mechanical Engg", role: "Events Head" },
-  { name: "Ananya Gupta", year: "B.Tech Y2", dept: "Chemical Engg", role: "Outreach" },
-  { name: "Karthik Rao", year: "B.Tech Y4", dept: "Aerospace", role: "Gitanushilanam Lead" },
-  { name: "Meera Nair", year: "Ph.D Y2", dept: "HSS", role: "Content Head" },
-  { name: "Siddharth Jain", year: "B.Tech Y3", dept: "Physics", role: "Design Lead" },
-  { name: "Divya Menon", year: "M.Tech Y1", dept: "CSE", role: "Kirtan Coordinator" },
-];
 
 const alumni = [
   {
