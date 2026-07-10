@@ -10,11 +10,10 @@ import {
   Award,
   ArrowRight,
   ChevronRight,
-  Users,
   GraduationCap,
 } from "lucide-react";
-import { useState } from "react";
 import { Reveal } from "../components/Reveal";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -89,16 +88,6 @@ const events = [
   },
 ];
 
-const teamMembers = [
-  { name: "Aarav Sharma", year: "B.Tech Y4", dept: "Computer Science", role: "President" },
-  { name: "Priya Verma", year: "M.Tech Y2", dept: "Electrical Engg", role: "Vice President" },
-  { name: "Rohan Iyer", year: "B.Tech Y3", dept: "Mechanical Engg", role: "Events Head" },
-  { name: "Ananya Gupta", year: "B.Tech Y2", dept: "Chemical Engg", role: "Outreach" },
-  { name: "Karthik Rao", year: "B.Tech Y4", dept: "Aerospace", role: "Gitanushilanam Lead" },
-  { name: "Meera Nair", year: "Ph.D Y2", dept: "HSS", role: "Content Head" },
-  { name: "Siddharth Jain", year: "B.Tech Y3", dept: "Physics", role: "Design Lead" },
-  { name: "Divya Menon", year: "M.Tech Y1", dept: "CSE", role: "Kirtan Coordinator" },
-];
 
 const alumni = [
   {
@@ -158,9 +147,8 @@ const alumni = [
 ];
 
 function Home() {
-  const [tab, setTab] = useState<"team" | "alumni">("team");
-
   return (
+
     <>
       {/* HERO */}
       <section className="relative min-h-screen flex items-center overflow-hidden">
@@ -352,93 +340,48 @@ function Home() {
           </Reveal>
 
           <div className="mt-10 flex justify-center">
-            <div className="inline-flex rounded-full bg-muted p-1 border border-border">
-              <button
-                onClick={() => setTab("team")}
-                className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition ${
-                  tab === "team"
-                    ? "bg-gradient-to-r from-saffron to-saffron-deep text-primary-foreground shadow-glow"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Users size={16} />
-                Current Team
-              </button>
-              <button
-                onClick={() => setTab("alumni")}
-                className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition ${
-                  tab === "alumni"
-                    ? "bg-gradient-to-r from-saffron to-saffron-deep text-primary-foreground shadow-glow"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <GraduationCap size={16} />
-                Alumni Network
-              </button>
+            <div className="inline-flex items-center gap-2 rounded-full bg-muted px-5 py-2.5 border border-border text-sm font-semibold text-foreground">
+              <GraduationCap size={16} className="text-saffron" />
+              Alumni Network
             </div>
           </div>
 
           <div className="mt-14">
-            {tab === "team" ? (
-              <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
-                {teamMembers.map((m, i) => (
-                  <Reveal key={m.name} delay={i * 0.04}>
-                    <div className="hover-lift group text-center rounded-2xl bg-card border border-border p-6">
-                      <div className="relative mx-auto h-24 w-24 rounded-full bg-gradient-to-br from-saffron to-saffron-deep grid place-items-center">
-                        <span className="font-display text-2xl font-bold text-primary-foreground">
-                          {m.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
-                        </span>
-                        <span className="absolute -bottom-1 -right-1 rounded-full bg-navy text-cream text-[10px] font-semibold px-2 py-0.5 border-2 border-background">
-                          {m.year.split(" ")[1]}
-                        </span>
-                      </div>
-                      <h3 className="mt-4 font-semibold text-foreground">{m.name}</h3>
-                      <p className="text-xs text-saffron font-semibold mt-1">{m.role}</p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {m.dept} · {m.year}
-                      </p>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {alumni.map((a, i) => (
+                <Reveal key={a.name} delay={i * 0.04}>
+                  <div className="hover-lift flex gap-4 rounded-2xl bg-card border border-border p-5">
+                    <img
+                      src={a.photo}
+                      alt={a.name}
+                      onError={(e) => {
+                        const t = e.target as HTMLImageElement;
+                        t.style.display = "none";
+                      }}
+                      className="h-16 w-16 shrink-0 rounded-full object-cover bg-muted"
+                    />
+                    <div className="min-w-0">
+                      <h3 className="font-semibold text-foreground truncate">{a.name}</h3>
+                      <p className="text-xs text-muted-foreground mt-1">{a.degree}</p>
+                      <p className="text-xs text-saffron font-semibold mt-1.5">{a.now}</p>
                     </div>
-                  </Reveal>
-                ))}
-              </div>
-            ) : (
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {alumni.map((a, i) => (
-                  <Reveal key={a.name} delay={i * 0.04}>
-                    <div className="hover-lift flex gap-4 rounded-2xl bg-card border border-border p-5">
-                      <img
-                        src={a.photo}
-                        alt={a.name}
-                        onError={(e) => {
-                          const t = e.target as HTMLImageElement;
-                          t.style.display = "none";
-                        }}
-                        className="h-16 w-16 shrink-0 rounded-full object-cover bg-muted"
-                      />
-                      <div className="min-w-0">
-                        <h3 className="font-semibold text-foreground truncate">{a.name}</h3>
-                        <p className="text-xs text-muted-foreground mt-1">{a.degree}</p>
-                        <p className="text-xs text-saffron font-semibold mt-1.5">{a.now}</p>
-                      </div>
-                    </div>
-                  </Reveal>
-                ))}
-              </div>
-            )}
+                  </div>
+                </Reveal>
+              ))}
+            </div>
           </div>
+
 
           <div className="mt-10 text-center">
             <Link
-              to={tab === "team" ? "/team" : "/alumni"}
+              to="/alumni"
               className="inline-flex items-center gap-2 text-sm font-semibold text-saffron hover:gap-3 transition-all"
             >
-              See all {tab === "team" ? "team members" : "alumni"}
+              See all alumni
               <ArrowRight size={14} />
             </Link>
           </div>
+
         </div>
       </section>
 
