@@ -384,13 +384,14 @@ function Home() {
 
           <div className="mt-10 text-center">
             <Link
-              to={tab === "team" ? "/team" : "/alumni"}
+              to="/alumni"
               className="inline-flex items-center gap-2 text-sm font-semibold text-saffron hover:gap-3 transition-all"
             >
-              See all {tab === "team" ? "team members" : "alumni"}
+              See all alumni
               <ArrowRight size={14} />
             </Link>
           </div>
+
         </div>
       </section>
 
