@@ -15,6 +15,7 @@ import {
   X,
 } from "lucide-react";
 import { Reveal } from "../components/Reveal";
+import { HeroFramePlayer } from "../components/HeroFramePlayer";
 
 
 export const Route = createFileRoute("/")({
@@ -37,8 +38,6 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const HERO_BG = "https://bvciitk.com/img/Kirtan.jpg";
-const HERO_FALLBACK = "https://bvciitk.com/images/cover_darker.jpg";
 
 const philosophyItems = [
   {
@@ -159,6 +158,18 @@ const alumni = [
 
 function Home() {
   const [selectedAlumnus, setSelectedAlumnus] = useState<typeof alumni[0] | null>(null);
+  const [scrollRatio, setScrollRatio] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const height = window.innerHeight;
+      const ratio = Math.max(0, Math.min(1, scrollY / height));
+      setScrollRatio(ratio);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     if (selectedAlumnus) {
@@ -174,63 +185,62 @@ function Home() {
   return (
 
     <>
-      {/* HERO */}
-      <section className="relative min-h-screen flex items-center overflow-hidden">
-        <div className="absolute inset-0">
-          <img
-            src={HERO_BG}
-            onError={(e) => ((e.target as HTMLImageElement).src = HERO_FALLBACK)}
-            alt="Kirtan at IIT Kanpur"
-            className="h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-navy/95 via-navy/85 to-navy/75" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,153,51,0.25),transparent_50%)]" />
-        </div>
+      {/* HERO SCROLL PINNING CONTAINER */}
+      <div className="relative h-[200vh] bg-black">
+        {/* HERO */}
+        <section className="sticky top-0 h-screen flex items-center overflow-hidden w-full">
+          <HeroFramePlayer />
 
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-20 w-full">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-3xl"
+          <div 
+            className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-20 w-full"
           >
-            <span className="inline-flex items-center gap-2 rounded-full glass-dark px-4 py-1.5 text-xs font-medium tracking-wide uppercase text-cream">
-              <Sparkles size={14} className="text-saffron" />
-              Where Science Meets Spirituality
-            </span>
-            <h1 className="mt-6 font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-cream leading-[1.05]">
-              Bridging <span className="text-gradient-saffron">Science</span>
-              <br />
-              and <span className="text-gradient-saffron">Spirituality</span>
-              <br />
-              at IIT Kanpur.
-            </h1>
-            <p className="mt-6 max-w-xl text-lg text-cream/80 leading-relaxed">
-              Discover inner peace, holistic living, and the timeless wisdom of the
-              Bhagavad Gita with the Bhaktivedanta Club.
-            </p>
-            <div className="mt-10 flex flex-wrap gap-4">
-              <Link
-                to="/events"
-                className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-saffron to-saffron-deep px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-glow hover:brightness-110 transition"
-              >
-                Explore Events
-                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-          </motion.div>
-        </div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="max-w-xl lg:max-w-[48%]"
+            >
+              <span className="inline-flex items-center gap-2 rounded-full glass-dark px-4 py-1.5 text-xs font-medium tracking-wide uppercase text-cream">
+                <Sparkles size={14} className="text-saffron" />
+                Where Science Meets Spirituality
+              </span>
+              <h1 className="mt-6 font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-cream leading-[1.05]">
+                Bridging <span className="text-gradient-saffron">Science</span>
+                <br />
+                and <span className="text-gradient-saffron">Spirituality</span>
+                <br />
+                at IIT Kanpur.
+              </h1>
+              <p className="mt-6 max-w-xl text-lg text-cream/80 leading-relaxed">
+                Discover inner peace, holistic living, and the timeless wisdom of the
+                Bhagavad Gita with the Bhaktivedanta Club.
+              </p>
+              <div className="mt-10 flex flex-wrap gap-4">
+                <Link
+                  to="/events"
+                  className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-saffron to-saffron-deep px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-glow hover:brightness-110 transition"
+                >
+                  Explore Events
+                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
+            </motion.div>
+          </div>
 
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 hidden sm:block">
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="h-10 w-6 rounded-full border-2 border-cream/40 flex justify-center pt-2"
+          <div 
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 hidden sm:block transition-opacity duration-300"
+            style={{ opacity: Math.max(0, 1 - scrollRatio * 4) }}
           >
-            <span className="h-2 w-1 rounded-full bg-cream/70" />
-          </motion.div>
-        </div>
-      </section>
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="h-10 w-6 rounded-full border-2 border-cream/40 flex justify-center pt-2"
+            >
+              <span className="h-2 w-1 rounded-full bg-cream/70" />
+            </motion.div>
+          </div>
+        </section>
+      </div>
 
       {/* ABOUT / PHILOSOPHY */}
       <section id="about" className="py-24 sm:py-32">
@@ -473,7 +483,7 @@ function Home() {
               <p className="text-sm font-semibold text-saffron mt-1.5">
                 {selectedAlumnus.now}
               </p>
-              
+
               <div className="border-t border-border mt-5 pt-5">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">About & BVC Days</h4>
                 <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">
