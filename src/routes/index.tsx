@@ -217,14 +217,6 @@ function Home() {
                 Explore Events
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link
-                to="/"
-                hash="japa"
-                className="inline-flex items-center gap-2 rounded-full border border-cream/30 bg-cream/5 backdrop-blur px-7 py-3.5 text-sm font-semibold text-cream hover:bg-cream/10 transition"
-              >
-                Learn About Japa
-                <ChevronRight size={16} />
-              </Link>
             </div>
           </motion.div>
         </div>
@@ -376,7 +368,7 @@ function Home() {
                 <Reveal key={a.name} delay={i * 0.04}>
                   <div
                     onClick={() => setSelectedAlumnus(a)}
-                    className="hover-lift flex gap-4 rounded-2xl bg-card border border-border p-5 cursor-pointer hover:border-saffron/40 transition-colors h-full"
+                    className="hover-lift flex gap-4 rounded-2xl bg-card border border-border p-5 cursor-pointer hover:border-saffron/40 transition-all duration-300 h-full"
                   >
                     <img
                       src={a.photo}
