@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Reveal } from "../components/Reveal";
+import { TiltCard3D } from "../components/ui/TiltCard3D";
 
 export const Route = createFileRoute("/team")({
   head: () => ({
@@ -205,42 +206,42 @@ function initials(name: string) {
 function MemberCard({ m, i }: { m: Member; i: number }) {
   return (
     <Reveal delay={i * 0.03}>
-      <div className="group hover-lift rounded-2xl bg-card border border-border overflow-hidden">
-        <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-saffron/15 to-navy/10">
-          <img
-            src={m.photo}
-            alt={m.name}
-            loading="lazy"
-            onError={(e) => {
-              const img = e.currentTarget;
-              img.style.display = "none";
-              const fallback = img.nextElementSibling as HTMLElement | null;
-              if (fallback) fallback.style.display = "grid";
-            }}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-          <div
-            style={{ display: "none" }}
-            className="absolute inset-0 place-items-center bg-gradient-to-br from-saffron to-saffron-deep"
-          >
-            <span className="font-display text-4xl font-bold text-primary-foreground">
-              {initials(m.name)}
+      <TiltCard3D className="h-full">
+        <div className="group h-full rounded-2xl bg-card border border-border overflow-hidden shadow-sm transition-shadow duration-300 hover:shadow-saffron/20 bg-background/50 backdrop-blur-sm">
+          <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-saffron/15 to-navy/10">
+            <img
+              src={m.photo}
+              alt={m.name}
+              loading="lazy"
+              onError={(e) => {
+                const img = e.currentTarget;
+                img.style.display = "none";
+                const fallback = img.nextElementSibling as HTMLElement | null;
+                if (fallback) fallback.style.display = "grid";
+              }}
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <div
+              style={{ display: "none" }}
+              className="absolute inset-0 place-items-center bg-gradient-to-br from-saffron to-saffron-deep"
+            >
+              <span className="font-display text-4xl font-bold text-primary-foreground">
+                {initials(m.name)}
+              </span>
+            </div>
+            <span className="absolute top-3 left-3 rounded-full bg-background/85 backdrop-blur px-2.5 py-1 text-[10px] font-semibold tracking-wider text-saffron">
+              {m.year}
             </span>
           </div>
-          <span className="absolute top-3 left-3 rounded-full bg-background/85 backdrop-blur px-2.5 py-1 text-[10px] font-semibold tracking-wider text-saffron">
-            {m.year}
-          </span>
+          <div className="p-4 relative">
+            <h3 className="font-semibold text-foreground leading-tight drop-shadow-sm">{m.name}</h3>
+            <p className="text-xs text-muted-foreground mt-1.5">{m.degree} · {m.dept}</p>
+            <p className="text-[11px] text-muted-foreground mt-1 font-mono">
+              Roll {m.roll}
+            </p>
+          </div>
         </div>
-        <div className="p-4">
-          <h3 className="font-semibold text-foreground leading-tight">{m.name}</h3>
-          <p className="text-xs text-saffron font-semibold mt-1">
-            {m.degree} · {m.dept}
-          </p>
-          <p className="text-[11px] text-muted-foreground mt-1 font-mono">
-            Roll {m.roll}
-          </p>
-        </div>
-      </div>
+      </TiltCard3D>
     </Reveal>
   );
 }

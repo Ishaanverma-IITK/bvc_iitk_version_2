@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Calendar, MapPin, ArrowRight } from "lucide-react";
 import { Reveal } from "../components/Reveal";
+import { TiltCard3D } from "../components/ui/TiltCard3D";
 
 export const Route = createFileRoute("/events")({
   head: () => ({
@@ -80,30 +81,32 @@ function EventsPage() {
         <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {events.map((ev, i) => (
             <Reveal key={ev.title} delay={i * 0.06}>
-              <article className="hover-lift group h-full overflow-hidden rounded-3xl bg-card border border-border flex flex-col">
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <img
-                    src={ev.image}
-                    alt={ev.title}
-                    onError={(e) =>
-                      ((e.target as HTMLImageElement).src =
-                        "https://bvciitk.com/images/cover.jpg")
-                    }
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy/70 via-transparent to-transparent" />
-                </div>
-                <div className="p-6 flex-1 flex flex-col">
-                  <div className="flex items-center gap-2 text-xs text-saffron font-semibold">
-                    <Calendar size={13} />
-                    {ev.date}
+              <TiltCard3D className="group h-full">
+                <article className="h-full overflow-hidden rounded-3xl bg-card border border-border flex flex-col shadow-sm transition-shadow duration-300 group-hover:shadow-saffron/20">
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <img
+                      src={ev.image}
+                      alt={ev.title}
+                      onError={(e) =>
+                        ((e.target as HTMLImageElement).src =
+                          "https://bvciitk.com/images/cover.jpg")
+                      }
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-navy/70 via-transparent to-transparent" />
                   </div>
-                  <h3 className="mt-2 font-display text-xl font-bold">{ev.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">
-                    {ev.body}
-                  </p>
-                </div>
-              </article>
+                  <div className="p-6 flex-1 flex flex-col relative bg-background/50 backdrop-blur-sm">
+                    <div className="flex items-center gap-2 text-xs text-saffron font-semibold">
+                      <Calendar size={13} />
+                      {ev.date}
+                    </div>
+                    <h3 className="mt-2 font-display text-2xl font-bold drop-shadow-sm">{ev.title}</h3>
+                    <p className="mt-3 text-sm text-muted-foreground leading-relaxed flex-1">
+                      {ev.body}
+                    </p>
+                  </div>
+                </article>
+              </TiltCard3D>
             </Reveal>
           ))}
         </div>

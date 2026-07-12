@@ -16,7 +16,8 @@ import {
 } from "lucide-react";
 import { Reveal } from "../components/Reveal";
 import { HeroFramePlayer } from "../components/HeroFramePlayer";
-
+import { TiltCard3D } from "../components/ui/TiltCard3D";
+import { ParallaxBackground } from "../components/ParallaxBackground";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -243,53 +244,54 @@ function Home() {
       </div>
 
       {/* ABOUT / PHILOSOPHY */}
-      <section id="about" className="py-24 sm:py-32">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid gap-16 lg:grid-cols-2 lg:items-center">
-          <Reveal>
-            <span className="text-xs uppercase tracking-[0.2em] text-saffron font-semibold">
-              About Us
-            </span>
-            <h2 className="mt-3 font-display text-4xl sm:text-5xl font-bold leading-tight">
-              A modern club with an <span className="text-gradient-saffron">ancient soul.</span>
-            </h2>
-            <p className="mt-6 text-muted-foreground leading-relaxed">
-              BVC IIT Kanpur bridges the gap between science and spirituality through a
-              scientific presentation of ancient Vedic scriptures. We promote holistic
-              living amongst students through cleanliness habits, nutritious diets,
-              regular mantra meditation, Bhagavad Gita seminars, selfless service — and
-              a life centered around Lord Krishna.
-            </p>
-            <blockquote className="mt-8 border-l-4 border-saffron pl-5 py-1 italic text-foreground/80">
-              "This knowledge is the king of education, the most secret of all secrets.
-              It is the purest, and gives direct perception of the self."
-              <footer className="mt-2 not-italic text-sm text-muted-foreground">
-                — Bhagavad Gita 9.2
-              </footer>
-            </blockquote>
-          </Reveal>
+      <section id="about" className="py-24 sm:py-32 relative">
+        <ParallaxBackground>
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid gap-16 lg:grid-cols-2 lg:items-center relative z-10">
+            <Reveal>
+              <span className="text-xs uppercase tracking-[0.2em] text-saffron font-semibold">
+                About Us
+              </span>
+              <h2 className="mt-3 font-display text-4xl sm:text-5xl font-bold leading-tight drop-shadow-sm">
+                A modern club with an <span className="text-gradient-saffron">ancient soul.</span>
+              </h2>
+              <p className="mt-6 text-muted-foreground leading-relaxed">
+                BVC IIT Kanpur bridges the gap between science and spirituality through a
+                scientific presentation of ancient Vedic scriptures. We promote holistic
+                living amongst students through cleanliness habits, nutritious diets,
+                regular mantra meditation, Bhagavad Gita seminars, selfless service — and
+                a life centered around Lord Krishna.
+              </p>
+              <blockquote className="mt-8 border-l-4 border-saffron pl-5 py-1 italic text-foreground/80">
+                "This knowledge is the king of education, the most secret of all secrets.
+                It is the purest, and gives direct perception of the self."
+                <footer className="mt-2 not-italic text-sm text-muted-foreground">
+                  — Bhagavad Gita 9.2
+                </footer>
+              </blockquote>
+            </Reveal>
 
-          <Reveal delay={0.15}>
-            <div id="japa" className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {philosophyItems.map(({ icon: Icon, title, body }) => (
-                <div
-                  key={title}
-                  className="hover-lift group relative overflow-hidden rounded-2xl bg-card border border-border p-6"
-                >
-                  <div className="absolute -top-8 -right-8 h-24 w-24 rounded-full bg-saffron/10 group-hover:bg-saffron/20 transition" />
-                  <div className="relative">
-                    <div className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-saffron to-saffron-deep text-primary-foreground">
-                      <Icon size={20} />
+            <Reveal delay={0.15}>
+              <div id="japa" className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {philosophyItems.map(({ icon: Icon, title, body }) => (
+                  <TiltCard3D key={title} className="group">
+                    <div className="w-full h-full relative overflow-hidden rounded-2xl bg-card border border-border p-6 shadow-lg hover:shadow-saffron/20 transition-shadow duration-300 bg-background/50 backdrop-blur-sm">
+                      <div className="absolute -top-8 -right-8 h-24 w-24 rounded-full bg-saffron/10 group-hover:bg-saffron/30 transition duration-500" />
+                      <div className="relative">
+                        <div className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-saffron to-saffron-deep text-primary-foreground shadow-md">
+                          <Icon size={20} />
+                        </div>
+                        <h3 className="mt-4 font-display text-xl font-bold tracking-tight drop-shadow-sm">{title}</h3>
+                        <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                          {body}
+                        </p>
+                      </div>
                     </div>
-                    <h3 className="mt-4 font-display text-xl font-bold">{title}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                      {body}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Reveal>
-        </div>
+                  </TiltCard3D>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </ParallaxBackground>
       </section>
 
       {/* EVENTS */}
@@ -311,38 +313,40 @@ function Home() {
           <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {events.map((ev, i) => (
               <Reveal key={ev.title} delay={i * 0.1}>
-                <article className="hover-lift group h-full overflow-hidden rounded-3xl bg-card border border-border flex flex-col">
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    <img
-                      src={ev.image}
-                      alt={ev.title}
-                      onError={(e) =>
-                        ((e.target as HTMLImageElement).src = HERO_FALLBACK)
-                      }
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-navy/70 via-transparent to-transparent" />
-                    <span className="absolute top-4 left-4 rounded-full bg-saffron/95 backdrop-blur px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-primary-foreground">
-                      {ev.tag}
-                    </span>
-                    <div className="absolute bottom-4 left-4 grid h-10 w-10 place-items-center rounded-full glass-dark text-cream">
-                      <ev.icon size={16} />
+                <TiltCard3D className="group h-full">
+                  <article className="h-full overflow-hidden rounded-3xl bg-card border border-border flex flex-col shadow-sm transition-shadow duration-300 group-hover:shadow-saffron/20">
+                    <div className="relative aspect-[4/3] overflow-hidden">
+                      <img
+                        src={ev.image}
+                        alt={ev.title}
+                        onError={(e) =>
+                          ((e.target as HTMLImageElement).src = HERO_FALLBACK)
+                        }
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-navy/70 via-transparent to-transparent" />
+                      <span className="absolute top-4 left-4 rounded-full bg-saffron/95 backdrop-blur px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-primary-foreground">
+                        {ev.tag}
+                      </span>
+                      <div className="absolute bottom-4 left-4 grid h-10 w-10 place-items-center rounded-full glass-dark text-cream">
+                        <ev.icon size={16} />
+                      </div>
                     </div>
-                  </div>
-                  <div className="p-6 flex-1 flex flex-col">
-                    <h3 className="font-display text-xl font-bold">{ev.title}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">
-                      {ev.body}
-                    </p>
-                    <Link
-                      to={ev.href}
-                      className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-saffron group/link"
-                    >
-                      Read more
-                      <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
-                    </Link>
-                  </div>
-                </article>
+                    <div className="p-6 flex-1 flex flex-col">
+                      <h3 className="font-display text-xl font-bold">{ev.title}</h3>
+                      <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">
+                        {ev.body}
+                      </p>
+                      <Link
+                        to={ev.href}
+                        className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-saffron group/link"
+                      >
+                        Read more
+                        <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
+                      </Link>
+                    </div>
+                  </article>
+                </TiltCard3D>
               </Reveal>
             ))}
           </div>
@@ -376,25 +380,27 @@ function Home() {
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {alumni.map((a, i) => (
                 <Reveal key={a.name} delay={i * 0.04}>
-                  <div
-                    onClick={() => setSelectedAlumnus(a)}
-                    className="hover-lift flex gap-4 rounded-2xl bg-card border border-border p-5 cursor-pointer hover:border-saffron/40 transition-all duration-300 h-full"
-                  >
-                    <img
-                      src={a.photo}
-                      alt={a.name}
-                      onError={(e) => {
-                        const t = e.target as HTMLImageElement;
-                        t.style.display = "none";
-                      }}
-                      className="h-16 w-16 shrink-0 rounded-full object-cover bg-muted"
-                    />
-                    <div className="min-w-0 flex-1">
-                      <h3 className="font-semibold text-foreground truncate">{a.name}</h3>
-                      <p className="text-xs text-muted-foreground mt-1">{a.degree}</p>
-                      <p className="text-xs text-saffron font-semibold mt-1.5">{a.now}</p>
+                  <TiltCard3D className="h-full">
+                    <div
+                      onClick={() => setSelectedAlumnus(a)}
+                      className="flex gap-4 rounded-2xl bg-card border border-border p-5 cursor-pointer hover:border-saffron/40 hover:shadow-saffron/10 shadow-sm transition-all duration-300 h-full"
+                    >
+                      <img
+                        src={a.photo}
+                        alt={a.name}
+                        onError={(e) => {
+                          const t = e.target as HTMLImageElement;
+                          t.style.display = "none";
+                        }}
+                        className="h-16 w-16 shrink-0 rounded-full object-cover bg-muted"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-semibold text-foreground truncate">{a.name}</h3>
+                        <p className="text-xs text-muted-foreground mt-1">{a.degree}</p>
+                        <p className="text-xs text-saffron font-semibold mt-1.5">{a.now}</p>
+                      </div>
                     </div>
-                  </div>
+                  </TiltCard3D>
                 </Reveal>
               ))}
             </div>

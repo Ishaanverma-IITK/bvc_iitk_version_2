@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, useMemo, useEffect } from "react";
 import { Search, X } from "lucide-react";
 import { Reveal } from "../components/Reveal";
+import { TiltCard3D } from "../components/ui/TiltCard3D";
 
 export const Route = createFileRoute("/alumni")({
   head: () => ({
@@ -823,26 +824,28 @@ function AlumniPage() {
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filteredAlumni.map((a, i) => (
             <Reveal key={`${a.name}-${i}`} delay={Math.min(i * 0.015, 0.3)}>
-              <div
-                onClick={() => setSelectedAlumnus(a)}
-                className="hover-lift flex gap-4 rounded-2xl bg-card border border-border p-5 h-full cursor-pointer hover:border-saffron/40 transition-all duration-300"
-              >
-                <img
-                  src={a.photo}
-                  alt={a.name}
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = "none";
-                  }}
-                  className="h-20 w-20 shrink-0 rounded-full object-cover bg-muted border border-border"
-                />
-                <div className="min-w-0 flex-1">
-                  <h3 className="font-semibold text-foreground leading-snug group-hover:text-saffron transition-colors">
-                    {a.name}
-                  </h3>
-                  <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">{a.degree}</p>
-                  <p className="text-xs text-saffron font-semibold mt-1.5 leading-relaxed">{a.now}</p>
+              <TiltCard3D className="h-full">
+                <div
+                  onClick={() => setSelectedAlumnus(a)}
+                  className="flex gap-4 rounded-2xl bg-card border border-border p-5 h-full cursor-pointer hover:border-saffron/40 hover:shadow-saffron/10 shadow-sm transition-all duration-300 bg-background/50 backdrop-blur-sm"
+                >
+                  <img
+                    src={a.photo}
+                    alt={a.name}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = "none";
+                    }}
+                    className="h-20 w-20 shrink-0 rounded-full object-cover bg-muted border border-border"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-semibold text-foreground leading-snug group-hover:text-saffron transition-colors">
+                      {a.name}
+                    </h3>
+                    <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">{a.degree}</p>
+                    <p className="text-xs text-saffron font-semibold mt-1.5 leading-relaxed">{a.now}</p>
+                  </div>
                 </div>
-              </div>
+              </TiltCard3D>
             </Reveal>
           ))}
         </div>
