@@ -76,7 +76,9 @@ export function HeroFramePlayer() {
       } else {
         drawWidth = canvasHeight * imgRatio;
         drawHeight = canvasHeight;
-        offsetX = (canvasWidth - drawWidth) / 2;
+        const isMobile = window.innerWidth < 768;
+        const focusPoint = isMobile ? 0.68 : 0.5;
+        offsetX = (canvasWidth - drawWidth) * focusPoint;
       }
 
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
