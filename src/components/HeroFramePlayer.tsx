@@ -20,14 +20,15 @@ export function HeroFramePlayer() {
       img.onload = () => {
         loadedCount++;
         setProgress(Math.floor((loadedCount / totalFrames) * 100));
-        if (loadedCount === totalFrames) {
+        // Start rendering as soon as the first frame is ready to avoid long loading times
+        if (i === 1 || loadedCount > 10) {
           setLoaded(true);
         }
       };
       img.onerror = () => {
         loadedCount++;
         setProgress(Math.floor((loadedCount / totalFrames) * 100));
-        if (loadedCount === totalFrames) {
+        if (i === 1 || loadedCount > 10) {
           setLoaded(true);
         }
       };
