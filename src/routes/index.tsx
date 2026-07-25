@@ -279,7 +279,7 @@ function Home() {
               pointerEvents: aboutRatio > 0.15 ? "auto" : "none"
             }}
           >
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid gap-16 lg:grid-cols-2 lg:items-center w-full">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid gap-6 sm:gap-16 lg:grid-cols-2 lg:items-center w-full">
               <motion.div
                 animate={{ 
                   y: aboutRatio > 0.1 ? 0 : 30
@@ -289,20 +289,22 @@ function Home() {
                 <span className="text-xs uppercase tracking-[0.2em] text-saffron font-semibold">
                   About Us
                 </span>
-                <h2 className="mt-3 font-display text-4xl sm:text-5xl font-bold leading-tight text-cream drop-shadow-md">
+                <h2 className="mt-2 sm:mt-3 font-display text-2xl sm:text-4xl lg:text-5xl font-bold leading-tight text-cream drop-shadow-md">
                   A modern club with an <span className="text-gradient-saffron">ancient soul.</span>
                 </h2>
-                <p className="mt-6 text-cream/80 leading-relaxed">
+                <p className="mt-3 sm:mt-6 text-sm sm:text-base text-cream/80 leading-relaxed hidden sm:block">
                   BVC IIT Kanpur bridges the gap between science and spirituality through a
                   scientific presentation of ancient Vedic scriptures. We promote holistic
                   living amongst students through cleanliness habits, nutritious diets,
                   regular mantra meditation, Bhagavad Gita seminars, selfless service — and
                   a life centered around Lord Krishna.
                 </p>
-                <blockquote className="mt-8 border-l-4 border-saffron pl-5 py-1 italic text-cream/95">
-                  "This knowledge is the king of education, the most secret of all secrets.
-                  It is the purest, and gives direct perception of the self."
-                  <footer className="mt-2 not-italic text-sm text-cream/60">
+                <p className="mt-2 text-xs text-cream/70 leading-relaxed sm:hidden">
+                  BVC IIT Kanpur bridges science and spirituality through Vedic scriptures, holistic living, meditation, and Bhagavad Gita seminars.
+                </p>
+                <blockquote className="mt-4 sm:mt-8 border-l-4 border-saffron pl-4 sm:pl-5 py-1 italic text-cream/95 text-sm sm:text-base">
+                  "This knowledge is the king of education, the most secret of all secrets."
+                  <footer className="mt-1 sm:mt-2 not-italic text-xs sm:text-sm text-cream/60">
                     — Bhagavad Gita 9.2
                   </footer>
                 </blockquote>
@@ -313,18 +315,18 @@ function Home() {
                   y: aboutRatio > 0.1 ? 0 : 30
                 }}
                 transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.1 }}
-                className="grid grid-cols-2 gap-3 sm:gap-6"
+                className="grid grid-cols-2 gap-2.5 sm:gap-6"
               >
                 {philosophyItems.map(({ icon: Icon, title, body }) => (
                   <TiltCard3D key={title} className="group">
-                    <div className="w-full h-full relative overflow-hidden rounded-xl sm:rounded-2xl bg-card border border-border p-3 sm:p-6 shadow-lg hover:shadow-saffron/20 transition-shadow duration-300 bg-background/95 backdrop-blur-md">
+                    <div className="w-full h-full relative overflow-hidden rounded-xl sm:rounded-2xl bg-card border border-border p-2.5 sm:p-6 shadow-lg hover:shadow-saffron/20 transition-shadow duration-300 bg-background/95 backdrop-blur-md">
                       <div className="absolute -top-8 -right-8 h-24 w-24 rounded-full bg-saffron/10 group-hover:bg-saffron/30 transition duration-500" />
                       <div className="relative">
-                        <div className="grid h-8 w-8 sm:h-11 sm:w-11 place-items-center rounded-lg sm:rounded-xl bg-gradient-to-br from-saffron to-saffron-deep text-primary-foreground shadow-md">
-                          <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
+                        <div className="grid h-7 w-7 sm:h-11 sm:w-11 place-items-center rounded-lg sm:rounded-xl bg-gradient-to-br from-saffron to-saffron-deep text-primary-foreground shadow-md">
+                          <Icon className="h-3.5 w-3.5 sm:h-5 sm:w-5" />
                         </div>
-                        <h3 className="mt-2 sm:mt-4 font-display text-[13px] sm:text-xl font-bold tracking-tight drop-shadow-sm text-foreground leading-snug">{title}</h3>
-                        <p className="mt-1 sm:mt-2 text-[10px] sm:text-sm text-muted-foreground leading-relaxed">
+                        <h3 className="mt-1.5 sm:mt-4 font-display text-xs sm:text-xl font-bold tracking-tight drop-shadow-sm text-foreground leading-snug">{title}</h3>
+                        <p className="mt-0.5 sm:mt-2 text-[9px] sm:text-sm text-muted-foreground leading-snug sm:leading-relaxed line-clamp-3 sm:line-clamp-none">
                           {body}
                         </p>
                       </div>

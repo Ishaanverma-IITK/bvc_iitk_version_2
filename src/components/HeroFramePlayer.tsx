@@ -10,29 +10,32 @@ export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
   const [loaded, setLoaded] = useState(false);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const lastIndexRef = useRef<number>(-1);
+  const rafRef = useRef<number>(0);
 
-  // Preload all 200 frames
+  // Preload frames — on mobile load every 2nd frame to save memory & speed up loading
   useEffect(() => {
+    const isMobile = window.innerWidth < 768;
     const totalFrames = 200;
+    const step = isMobile ? 2 : 1;
+    const framesToLoad = Math.ceil(totalFrames / step);
     let loadedCount = 0;
     const images: HTMLImageElement[] = [];
 
-    for (let i = 1; i <= totalFrames; i++) {
+    for (let i = 1; i <= totalFrames; i += step) {
       const img = new Image();
       const frameNum = String(i).padStart(3, "0");
       img.src = `/hero-frames/ezgif-frame-${frameNum}.jpg`;
       img.onload = () => {
         loadedCount++;
-        setProgress(Math.floor((loadedCount / totalFrames) * 100));
-        // Start rendering as soon as the first frame is ready to avoid long loading times
-        if (i === 1 || loadedCount > 10) {
+        setProgress(Math.floor((loadedCount / framesToLoad) * 100));
+        if (loadedCount > 5) {
           setLoaded(true);
         }
       };
       img.onerror = () => {
         loadedCount++;
-        setProgress(Math.floor((loadedCount / totalFrames) * 100));
-        if (i === 1 || loadedCount > 10) {
+        setProgress(Math.floor((loadedCount / framesToLoad) * 100));
+        if (loadedCount > 5) {
           setLoaded(true);
         }
       };
@@ -50,7 +53,7 @@ export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const totalFrames = 200;
+    const totalImages = imagesRef.current.length;
 
     const drawFrame = (frameIndex: number) => {
       if (frameIndex === lastIndexRef.current) return;
@@ -87,8 +90,9 @@ export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
         let focusPoint = 0.5;
 
         if (isMobile) {
-          // Centered book cover at frame 0 (focusPoint 0.5), smooth transition to Left page (focusPoint 0.12) by frame 120
-          const t = Math.min(1, frameIndex / 120);
+          // Centered book cover at frame 0 (focusPoint 0.5), smooth transition to Left page (focusPoint 0.12) by frame 60 (120 in original / 2 step)
+          const transitionEnd = Math.floor(120 / (200 / totalImages));
+          const t = Math.min(1, frameIndex / transitionEnd);
           focusPoint = 0.5 - (0.5 - 0.12) * t;
 
           // Scale image so that the page fits within the screen width with safety padding
@@ -110,11 +114,15 @@ export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
     };
 
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const height = window.innerHeight; // Scrub over 2 full viewport heights (0.5x speed)
-      const ratio = Math.max(0, Math.min(1, scrollY / (height * 2)));
-      const frameIndex = Math.min(totalFrames - 1, Math.floor(ratio * (totalFrames - 1)));
-      drawFrame(frameIndex);
+      // Use rAF to throttle canvas redraws for smooth scrolling
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        const height = window.innerHeight; // Scrub over 2 full viewport heights (0.5x speed)
+        const ratio = Math.max(0, Math.min(1, scrollY / (height * 2)));
+        const frameIndex = Math.min(totalImages - 1, Math.floor(ratio * (totalImages - 1)));
+        drawFrame(frameIndex);
+      });
     };
 
     const handleResize = () => {
@@ -132,6 +140,7 @@ export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
     return () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("scroll", handleScroll);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, [loaded]);
 
