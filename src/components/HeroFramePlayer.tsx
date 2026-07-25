@@ -1,15 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 
-export function HeroFramePlayer() {
+interface HeroFramePlayerProps {
+  overlayOpacity?: number;
+}
+
+export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [progress, setProgress] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const lastIndexRef = useRef<number>(-1);
 
-  // Preload all 147 frames
+  // Preload all 200 frames
   useEffect(() => {
-    const totalFrames = 160;
+    const totalFrames = 200;
     let loadedCount = 0;
     const images: HTMLImageElement[] = [];
 
@@ -46,7 +50,7 @@ export function HeroFramePlayer() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const totalFrames = 160;
+    const totalFrames = 200;
 
     const drawFrame = (frameIndex: number) => {
       if (frameIndex === lastIndexRef.current) return;
@@ -88,8 +92,8 @@ export function HeroFramePlayer() {
 
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      const height = window.innerHeight; // Scrub over 1 full viewport height
-      const ratio = Math.max(0, Math.min(1, scrollY / height));
+      const height = window.innerHeight; // Scrub over 2 full viewport heights (0.5x speed)
+      const ratio = Math.max(0, Math.min(1, scrollY / (height * 2)));
       const frameIndex = Math.min(totalFrames - 1, Math.floor(ratio * (totalFrames - 1)));
       drawFrame(frameIndex);
     };
@@ -127,9 +131,15 @@ export function HeroFramePlayer() {
       )}
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full object-cover" />
       {/* Left-to-right gradient overlay to keep text readable on the left and video clear on the right */}
-      <div className="absolute inset-0 bg-gradient-to-r from-navy/95 via-navy/60 to-transparent opacity-90" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,153,51,0.18),transparent_50%)]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-black/25 pointer-events-none" />
+      <div 
+        className="absolute inset-0 bg-gradient-to-r from-navy/95 via-navy/60 to-transparent pointer-events-none" 
+        style={{ opacity: overlayOpacity * 0.9 }}
+      />
+      <div 
+        className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,153,51,0.18),transparent_50%)] pointer-events-none" 
+        style={{ opacity: overlayOpacity }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-black/30 pointer-events-none" />
     </div>
   );
 }

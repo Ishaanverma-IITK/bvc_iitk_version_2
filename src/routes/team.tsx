@@ -128,14 +128,6 @@ const team: Member[] = [
   },
   // Y23
   {
-    name: "Archil Mogra",
-    degree: "BTech",
-    dept: "Chemical Engineering",
-    year: "Y23",
-    roll: "230185",
-    photo: photo("Archil Mogra.jpg"),
-  },
-  {
     name: "Divyansh Asthana",
     degree: "BS",
     dept: "Earth Science",
@@ -158,14 +150,6 @@ const team: Member[] = [
     year: "Y23",
     roll: "230074",
     photo: photo("Aditya Nitin Patil.jpg"),
-  },
-  {
-    name: "Aaditya Raj",
-    degree: "BTech",
-    dept: "Materials Science and Engineering",
-    year: "Y23",
-    roll: "230005",
-    photo: photo("Aaditya Raj.jpg"),
   },
   {
     name: "Sachin Kumhar",

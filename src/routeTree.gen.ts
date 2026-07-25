@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as GitanushilanamRouteImport } from './routes/gitanushilanam'
-import { Route as EventsRouteImport } from './routes/events'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AlumniRouteImport } from './routes/alumni'
 import { Route as IndexRouteImport } from './routes/index'
@@ -24,11 +23,6 @@ const TeamRoute = TeamRouteImport.update({
 const GitanushilanamRoute = GitanushilanamRouteImport.update({
   id: '/gitanushilanam',
   path: '/gitanushilanam',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EventsRoute = EventsRouteImport.update({
-  id: '/events',
-  path: '/events',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -51,7 +45,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/alumni': typeof AlumniRoute
   '/contact': typeof ContactRoute
-  '/events': typeof EventsRoute
   '/gitanushilanam': typeof GitanushilanamRoute
   '/team': typeof TeamRoute
 }
@@ -59,7 +52,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/alumni': typeof AlumniRoute
   '/contact': typeof ContactRoute
-  '/events': typeof EventsRoute
   '/gitanushilanam': typeof GitanushilanamRoute
   '/team': typeof TeamRoute
 }
@@ -68,31 +60,21 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/alumni': typeof AlumniRoute
   '/contact': typeof ContactRoute
-  '/events': typeof EventsRoute
   '/gitanushilanam': typeof GitanushilanamRoute
   '/team': typeof TeamRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    '/' | '/alumni' | '/contact' | '/events' | '/gitanushilanam' | '/team'
+  fullPaths: '/' | '/alumni' | '/contact' | '/gitanushilanam' | '/team'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/alumni' | '/contact' | '/events' | '/gitanushilanam' | '/team'
-  id:
-    | '__root__'
-    | '/'
-    | '/alumni'
-    | '/contact'
-    | '/events'
-    | '/gitanushilanam'
-    | '/team'
+  to: '/' | '/alumni' | '/contact' | '/gitanushilanam' | '/team'
+  id: '__root__' | '/' | '/alumni' | '/contact' | '/gitanushilanam' | '/team'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AlumniRoute: typeof AlumniRoute
   ContactRoute: typeof ContactRoute
-  EventsRoute: typeof EventsRoute
   GitanushilanamRoute: typeof GitanushilanamRoute
   TeamRoute: typeof TeamRoute
 }
@@ -111,13 +93,6 @@ declare module '@tanstack/react-router' {
       path: '/gitanushilanam'
       fullPath: '/gitanushilanam'
       preLoaderRoute: typeof GitanushilanamRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/events': {
-      id: '/events'
-      path: '/events'
-      fullPath: '/events'
-      preLoaderRoute: typeof EventsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -148,7 +123,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AlumniRoute: AlumniRoute,
   ContactRoute: ContactRoute,
-  EventsRoute: EventsRoute,
   GitanushilanamRoute: GitanushilanamRoute,
   TeamRoute: TeamRoute,
 }

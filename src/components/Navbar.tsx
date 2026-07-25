@@ -7,8 +7,8 @@ import bvcLogo from "@/assets/bvc-logo.png";
 
 
 const links = [
-  { label: "About", to: "/", hash: "about" },
-  { label: "Events", to: "/events" },
+  { label: "About", to: "/", hash: "hero" },
+  { label: "Gallery", to: "/", hash: "events" },
   { label: "Gitanushilanam", to: "/gitanushilanam" },
   { label: "Team", to: "/team" },
   { label: "Alumni", to: "/alumni" },
@@ -23,11 +23,36 @@ export function Navbar() {
   const isDarkNavbar = isHome && !scrolled;
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => {
+      const threshold = isHome ? window.innerHeight * 4.0 : 24;
+      setScrolled(window.scrollY > threshold);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [isHome]);
+
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, l: typeof links[number]) => {
+    if (l.to === "/" && "hash" in l) {
+      if (location.pathname === "/") {
+        e.preventDefault();
+        const hash = l.hash;
+        if (hash === "hero") {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+          const element = document.getElementById(hash);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        }
+      }
+    }
+    setOpen(false);
+  };
 
   return (
     <header
@@ -58,6 +83,7 @@ export function Navbar() {
               <Link
                 to={l.to}
                 hash={"hash" in l ? l.hash : undefined}
+                onClick={(e) => handleLinkClick(e, l)}
                 className={`px-3 py-2 text-sm font-medium transition-colors relative after:absolute after:left-3 after:right-3 after:bottom-1 after:h-0.5 after:origin-left after:scale-x-0 after:bg-saffron after:transition-transform hover:after:scale-x-100 ${
                   isDarkNavbar
                     ? "text-cream/90 hover:text-saffron"
@@ -106,7 +132,7 @@ export function Navbar() {
                   <Link
                     to={l.to}
                     hash={"hash" in l ? l.hash : undefined}
-                    onClick={() => setOpen(false)}
+                    onClick={(e) => handleLinkClick(e, l)}
                     className="block rounded-xl px-4 py-3 text-sm font-medium text-foreground hover:bg-saffron/10 hover:text-saffron transition"
                   >
                     {l.label}

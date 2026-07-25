@@ -13,11 +13,6 @@ const InstagramIcon = (p: React.SVGProps<SVGSVGElement>) => (
     <rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
   </svg>
 );
-const GithubIcon = (p: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" {...p}>
-    <path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.7.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/>
-  </svg>
-);
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -51,7 +46,7 @@ export function Footer() {
               <YoutubeIcon />
             </a>
             <a
-              href="https://www.instagram.com/bvc_iitk/"
+              href="https://www.instagram.com/bvciitkanpur/"
               target="_blank"
               rel="noreferrer"
               aria-label="Instagram"
@@ -59,22 +54,13 @@ export function Footer() {
             >
               <InstagramIcon />
             </a>
-            <a
-              href="https://github.com/bvciitk"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="GitHub"
-              className="grid h-11 w-11 place-items-center rounded-full border border-white/15 hover:bg-saffron hover:border-saffron transition"
-            >
-              <GithubIcon />
-            </a>
           </div>
         </div>
 
         <div>
           <h4 className="font-display text-lg mb-4 text-saffron">Quick Links</h4>
           <ul className="space-y-2 text-sm">
-            <li><Link to="/events" className="hover:text-saffron">Events</Link></li>
+            <li><Link to="/" hash="events" className="hover:text-saffron">Gallery</Link></li>
             <li><Link to="/gitanushilanam" className="hover:text-saffron">Gitanushilanam</Link></li>
             <li><Link to="/team" className="hover:text-saffron">Team</Link></li>
             <li><Link to="/alumni" className="hover:text-saffron">Alumni</Link></li>

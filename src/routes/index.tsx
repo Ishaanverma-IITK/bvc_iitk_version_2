@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import {
   Brain,
@@ -67,7 +67,7 @@ const events = [
   {
     title: "Janmashtami Festival",
     tag: "Annual Flagship",
-    image: "https://bvciitk.com/images/portfolio/Janmashtami%20(1).jpg",
+    image: "/images/portfolio/Janmashtami (1).jpg",
     body: "1000+ visitors, cultural performances, kirtan, interschool competitions, and free prasadam dinner across the campus.",
     href: "/events",
     icon: Music,
@@ -75,18 +75,42 @@ const events = [
   {
     title: "Gitanushilanam",
     tag: "Gita Competition",
-    image: "https://bvciitk.com/images/portfolio/Bhagavad%20Gita%20Lecture%20Series%20(1).jpg",
+    image: "/images/portfolio/Bhagavad Gita Lecture Series (1).jpg",
     body: "Annual Bhagavad Gita competition — quizzes, shloka recitations, essays, and awards for students across India.",
     href: "/gitanushilanam",
     icon: BookOpen,
   },
   {
-    title: "Gita Jayanti & Radhastami",
+    title: "Spiritual Retreats",
     tag: "Signature Festivals",
-    image: "https://bvciitk.com/images/portfolio/Spiritual%20Retreats%20(1)%20(1)%20(1).jpg",
-    body: "Special festival celebrations — mass Gita recitation, abhishek, kirtan, and community feast.",
+    image: "/images/portfolio/Spiritual Retreats (1) (1) (1).jpg",
+    body: "Special festival celebrations, mass Gita recitations, abhishek, kirtan, and community retreats to holy places.",
     href: "/events",
     icon: Award,
+  },
+  {
+    title: "Welfare Work & Prasadam",
+    tag: "Social Service",
+    image: "/images/portfolio/Welfarework.jpeg",
+    body: "Selfless community service, including extensive prasadam distribution and running community kitchens during critical times.",
+    href: "/events",
+    icon: Heart,
+  },
+  {
+    title: "Personality Development",
+    tag: "Seminars",
+    image: "/images/portfolio/Personality Development (1).jpg",
+    body: "Seminars and workshops focusing on life skills, mind control, and developing a balanced lifestyle for students.",
+    href: "/events",
+    icon: Brain,
+  },
+  {
+    title: "Leading Edge Research",
+    tag: "Robotics & AI",
+    image: "/images/portfolio/Leading Edge Research.jpg",
+    body: "Cutting-edge research in robotics and AI presented at international conferences like ICRA, exploring the science of consciousness.",
+    href: "/events",
+    icon: Sparkles,
   },
 ];
 
@@ -159,14 +183,27 @@ const alumni = [
 
 function Home() {
   const [selectedAlumnus, setSelectedAlumnus] = useState<typeof alumni[0] | null>(null);
-  const [scrollRatio, setScrollRatio] = useState(0);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+  const [videoRatio, setVideoRatio] = useState(0);
+  const [aboutRatio, setAboutRatio] = useState(0);
+  const [overlayOpacity, setOverlayOpacity] = useState(0.7);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const height = window.innerHeight;
-      const ratio = Math.max(0, Math.min(1, scrollY / height));
-      setScrollRatio(ratio);
+      const vRatio = Math.max(0, Math.min(1, scrollY / (height * 2)));
+      setVideoRatio(vRatio);
+      const aRatio = Math.max(0, Math.min(1, (scrollY - height * 2.5) / height));
+      setAboutRatio(aRatio);
+
+      // Video slowly brightens (overlay goes from 0.7 to 0) during scroll,
+      // and dims back down as the About overlay fades in.
+      if (scrollY < height * 2) {
+        setOverlayOpacity((1 - vRatio) * 0.7);
+      } else {
+        setOverlayOpacity(aRatio * 0.9);
+      }
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -187,18 +224,23 @@ function Home() {
 
     <>
       {/* HERO SCROLL PINNING CONTAINER */}
-      <div className="relative h-[200vh] bg-black">
+      <div id="hero" className="relative h-[450vh] bg-black">
+
         {/* HERO */}
         <section className="sticky top-0 h-screen flex items-center overflow-hidden w-full">
-          <HeroFramePlayer />
+          <HeroFramePlayer overlayOpacity={overlayOpacity} />
 
           <div 
             className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-20 w-full"
           >
             <motion.div
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              animate={{ 
+                opacity: videoRatio > 0.5 ? 0 : 1, 
+                y: videoRatio > 0.5 ? -20 : 0 
+              }}
+              transition={{ duration: 0.4 }}
+              style={{ pointerEvents: videoRatio > 0.5 ? "none" : "auto" }}
               className="max-w-xl lg:max-w-[48%]"
             >
               <span className="inline-flex items-center gap-2 rounded-full glass-dark px-4 py-1.5 text-xs font-medium tracking-wide uppercase text-cream">
@@ -218,19 +260,84 @@ function Home() {
               </p>
               <div className="mt-10 flex flex-wrap gap-4">
                 <Link
-                  to="/events"
+                  to="/"
+                  hash="events"
                   className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-saffron to-saffron-deep px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-glow hover:brightness-110 transition"
                 >
-                  Explore Events
+                  Explore Gallery
                   <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
             </motion.div>
           </div>
 
+          {/* ABOUT US OVERLAY */}
+          <div 
+            className="absolute inset-0 z-20 flex items-center w-full h-full pointer-events-none"
+            style={{ 
+              opacity: aboutRatio,
+              pointerEvents: aboutRatio > 0.15 ? "auto" : "none"
+            }}
+          >
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid gap-16 lg:grid-cols-2 lg:items-center w-full">
+              <motion.div
+                animate={{ 
+                  y: aboutRatio > 0.1 ? 0 : 30
+                }}
+                transition={{ type: "spring", stiffness: 100, damping: 20 }}
+              >
+                <span className="text-xs uppercase tracking-[0.2em] text-saffron font-semibold">
+                  About Us
+                </span>
+                <h2 className="mt-3 font-display text-4xl sm:text-5xl font-bold leading-tight text-cream drop-shadow-md">
+                  A modern club with an <span className="text-gradient-saffron">ancient soul.</span>
+                </h2>
+                <p className="mt-6 text-cream/80 leading-relaxed">
+                  BVC IIT Kanpur bridges the gap between science and spirituality through a
+                  scientific presentation of ancient Vedic scriptures. We promote holistic
+                  living amongst students through cleanliness habits, nutritious diets,
+                  regular mantra meditation, Bhagavad Gita seminars, selfless service — and
+                  a life centered around Lord Krishna.
+                </p>
+                <blockquote className="mt-8 border-l-4 border-saffron pl-5 py-1 italic text-cream/95">
+                  "This knowledge is the king of education, the most secret of all secrets.
+                  It is the purest, and gives direct perception of the self."
+                  <footer className="mt-2 not-italic text-sm text-cream/60">
+                    — Bhagavad Gita 9.2
+                  </footer>
+                </blockquote>
+              </motion.div>
+
+              <motion.div
+                animate={{ 
+                  y: aboutRatio > 0.1 ? 0 : 30
+                }}
+                transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.1 }}
+                className="grid grid-cols-1 sm:grid-cols-2 gap-6"
+              >
+                {philosophyItems.map(({ icon: Icon, title, body }) => (
+                  <TiltCard3D key={title} className="group">
+                    <div className="w-full h-full relative overflow-hidden rounded-2xl bg-card border border-border p-6 shadow-lg hover:shadow-saffron/20 transition-shadow duration-300 bg-background/95 backdrop-blur-md">
+                      <div className="absolute -top-8 -right-8 h-24 w-24 rounded-full bg-saffron/10 group-hover:bg-saffron/30 transition duration-500" />
+                      <div className="relative">
+                        <div className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-saffron to-saffron-deep text-primary-foreground shadow-md">
+                          <Icon size={20} />
+                        </div>
+                        <h3 className="mt-4 font-display text-xl font-bold tracking-tight drop-shadow-sm text-foreground">{title}</h3>
+                        <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                          {body}
+                        </p>
+                      </div>
+                    </div>
+                  </TiltCard3D>
+                ))}
+              </motion.div>
+            </div>
+          </div>
+
           <div 
             className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 hidden sm:block transition-opacity duration-300"
-            style={{ opacity: Math.max(0, 1 - scrollRatio * 4) }}
+            style={{ opacity: Math.max(0, 1 - videoRatio * 4) }}
           >
             <motion.div
               animate={{ y: [0, 8, 0] }}
@@ -243,70 +350,21 @@ function Home() {
         </section>
       </div>
 
-      {/* ABOUT / PHILOSOPHY */}
-      <section id="about" className="py-24 sm:py-32 relative">
-        <ParallaxBackground>
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid gap-16 lg:grid-cols-2 lg:items-center relative z-10">
-            <Reveal>
-              <span className="text-xs uppercase tracking-[0.2em] text-saffron font-semibold">
-                About Us
-              </span>
-              <h2 className="mt-3 font-display text-4xl sm:text-5xl font-bold leading-tight drop-shadow-sm">
-                A modern club with an <span className="text-gradient-saffron">ancient soul.</span>
-              </h2>
-              <p className="mt-6 text-muted-foreground leading-relaxed">
-                BVC IIT Kanpur bridges the gap between science and spirituality through a
-                scientific presentation of ancient Vedic scriptures. We promote holistic
-                living amongst students through cleanliness habits, nutritious diets,
-                regular mantra meditation, Bhagavad Gita seminars, selfless service — and
-                a life centered around Lord Krishna.
-              </p>
-              <blockquote className="mt-8 border-l-4 border-saffron pl-5 py-1 italic text-foreground/80">
-                "This knowledge is the king of education, the most secret of all secrets.
-                It is the purest, and gives direct perception of the self."
-                <footer className="mt-2 not-italic text-sm text-muted-foreground">
-                  — Bhagavad Gita 9.2
-                </footer>
-              </blockquote>
-            </Reveal>
-
-            <Reveal delay={0.15}>
-              <div id="japa" className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {philosophyItems.map(({ icon: Icon, title, body }) => (
-                  <TiltCard3D key={title} className="group">
-                    <div className="w-full h-full relative overflow-hidden rounded-2xl bg-card border border-border p-6 shadow-lg hover:shadow-saffron/20 transition-shadow duration-300 bg-background/50 backdrop-blur-sm">
-                      <div className="absolute -top-8 -right-8 h-24 w-24 rounded-full bg-saffron/10 group-hover:bg-saffron/30 transition duration-500" />
-                      <div className="relative">
-                        <div className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-saffron to-saffron-deep text-primary-foreground shadow-md">
-                          <Icon size={20} />
-                        </div>
-                        <h3 className="mt-4 font-display text-xl font-bold tracking-tight drop-shadow-sm">{title}</h3>
-                        <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                          {body}
-                        </p>
-                      </div>
-                    </div>
-                  </TiltCard3D>
-                ))}
-              </div>
-            </Reveal>
-          </div>
-        </ParallaxBackground>
-      </section>
-
       {/* EVENTS */}
       <section id="events" className="py-24 sm:py-32 bg-gradient-to-b from-background to-accent/30">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Reveal className="max-w-2xl">
+          <Reveal className="max-w-4xl">
             <span className="text-xs uppercase tracking-[0.2em] text-saffron font-semibold">
               What We Do
             </span>
             <h2 className="mt-3 font-display text-4xl sm:text-5xl font-bold leading-tight">
-              Flagship <span className="text-gradient-saffron">Events</span>
+              Our <span className="text-gradient-saffron">Gallery</span>
             </h2>
-            <p className="mt-4 text-muted-foreground">
-              A year of celebrations, contemplations, and community — hosted by students,
-              open to everyone on campus.
+            <p className="mt-6 text-base sm:text-lg text-muted-foreground leading-relaxed">
+              BVC organises a variety of events throughout the year to promote spiritual wisdom in and around the campus.
+              Our annual Festival - Janmashtami witnesses huge footfall from the campus as well as visitors from outside.
+              BVC also conducts Institute level lecture series on Bhagavad Gita and daily Mantra Meditation Classes.
+              Our Melodious Kirtans, delicious prasadam and divinely intoxicating retreats are loved by all.
             </p>
           </Reveal>
 
@@ -315,7 +373,10 @@ function Home() {
               <Reveal key={ev.title} delay={i * 0.1}>
                 <TiltCard3D className="group h-full">
                   <article className="h-full overflow-hidden rounded-3xl bg-card border border-border flex flex-col shadow-sm transition-shadow duration-300 group-hover:shadow-saffron/20">
-                    <div className="relative aspect-[4/3] overflow-hidden">
+                    <div 
+                      className="relative aspect-[4/3] overflow-hidden cursor-pointer"
+                      onClick={() => setSelectedImageIndex(i)}
+                    >
                       <img
                         src={ev.image}
                         alt={ev.title}
@@ -325,9 +386,6 @@ function Home() {
                         className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-navy/70 via-transparent to-transparent" />
-                      <span className="absolute top-4 left-4 rounded-full bg-saffron/95 backdrop-blur px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-primary-foreground">
-                        {ev.tag}
-                      </span>
                       <div className="absolute bottom-4 left-4 grid h-10 w-10 place-items-center rounded-full glass-dark text-cream">
                         <ev.icon size={16} />
                       </div>
@@ -337,13 +395,15 @@ function Home() {
                       <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">
                         {ev.body}
                       </p>
-                      <Link
-                        to={ev.href}
-                        className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-saffron group/link"
-                      >
-                        Read more
-                        <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
-                      </Link>
+                      {ev.href !== "/events" && (
+                        <Link
+                          to={ev.href}
+                          className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-saffron group/link"
+                        >
+                          Read more
+                          <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
+                        </Link>
+                      )}
                     </div>
                   </article>
                 </TiltCard3D>
@@ -500,6 +560,86 @@ function Home() {
           </div>
         </div>
       )}
+
+      {/* LIGHTBOX MODAL */}
+      <AnimatePresence>
+        {selectedImageIndex !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md p-4"
+          >
+            {/* Clickable backdrop */}
+            <div 
+              className="absolute inset-0 z-10" 
+              onClick={() => setSelectedImageIndex(null)} 
+            />
+
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedImageIndex(null)}
+              className="absolute top-6 right-6 z-25 text-white/80 hover:text-white p-3 rounded-full hover:bg-white/10 transition-colors pointer-events-auto"
+              aria-label="Close lightbox"
+            >
+              <X size={24} />
+            </button>
+
+            {/* Prev Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedImageIndex((prev) => 
+                  prev !== null ? (prev === 0 ? events.length - 1 : prev - 1) : null
+                );
+              }}
+              className="absolute left-6 z-25 text-white/80 hover:text-white p-3 rounded-full hover:bg-white/10 transition-colors pointer-events-auto"
+              aria-label="Previous image"
+            >
+              <ChevronRight className="rotate-180" size={28} />
+            </button>
+
+            {/* Next Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedImageIndex((prev) => 
+                  prev !== null ? (prev === events.length - 1 ? 0 : prev + 1) : null
+                );
+              }}
+              className="absolute right-6 z-25 text-white/80 hover:text-white p-3 rounded-full hover:bg-white/10 transition-colors pointer-events-auto"
+              aria-label="Next image"
+            >
+              <ChevronRight size={28} />
+            </button>
+
+            {/* Content Container */}
+            <div className="relative max-w-4xl max-h-[85vh] w-full flex flex-col items-center justify-center p-4 z-20 pointer-events-none">
+              <motion.img
+                key={selectedImageIndex}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.3 }}
+                src={events[selectedImageIndex].image}
+                alt={events[selectedImageIndex].title}
+                className="max-w-full max-h-[70vh] object-contain rounded-2xl shadow-2xl pointer-events-auto"
+              />
+              <div className="mt-6 text-center text-white max-w-2xl px-4 pointer-events-auto">
+                <span className="text-xs font-semibold uppercase tracking-widest text-saffron">
+                  {events[selectedImageIndex].tag}
+                </span>
+                <h3 className="font-display text-2xl font-bold mt-1 text-cream">
+                  {events[selectedImageIndex].title}
+                </h3>
+                <p className="mt-2 text-sm text-cream/70 leading-relaxed">
+                  {events[selectedImageIndex].body}
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
