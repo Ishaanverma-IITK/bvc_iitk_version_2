@@ -81,9 +81,28 @@ export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
       } else {
         drawWidth = canvasHeight * imgRatio;
         drawHeight = canvasHeight;
+        
         const isMobile = window.innerWidth < 768;
-        const focusPoint = isMobile ? 0.68 : 0.5;
+        let scale = 1.0;
+        let focusPoint = 0.5;
+
+        if (isMobile) {
+          // Centered book cover at frame 0 (focusPoint 0.5), smooth transition to Left page (focusPoint 0.33) by frame 120
+          const t = Math.min(1, frameIndex / 120);
+          focusPoint = 0.5 - (0.5 - 0.33) * t;
+
+          // Scale image so that the page fits within the screen width with safety padding
+          const bookWidthRatio = 0.35;
+          const fitScale = canvasWidth / (drawWidth * bookWidthRatio);
+          if (fitScale < 1) {
+            scale = fitScale;
+          }
+        }
+
+        drawWidth = drawWidth * scale;
+        drawHeight = drawHeight * scale;
         offsetX = (canvasWidth - drawWidth) * focusPoint;
+        offsetY = (canvasHeight - drawHeight) / 2;
       }
 
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
