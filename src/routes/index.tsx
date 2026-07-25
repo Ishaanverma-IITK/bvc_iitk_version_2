@@ -313,18 +313,18 @@ function Home() {
                   y: aboutRatio > 0.1 ? 0 : 30
                 }}
                 transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.1 }}
-                className="grid grid-cols-1 sm:grid-cols-2 gap-6"
+                className="grid grid-cols-2 gap-3 sm:gap-6"
               >
                 {philosophyItems.map(({ icon: Icon, title, body }) => (
                   <TiltCard3D key={title} className="group">
-                    <div className="w-full h-full relative overflow-hidden rounded-2xl bg-card border border-border p-6 shadow-lg hover:shadow-saffron/20 transition-shadow duration-300 bg-background/95 backdrop-blur-md">
+                    <div className="w-full h-full relative overflow-hidden rounded-xl sm:rounded-2xl bg-card border border-border p-3 sm:p-6 shadow-lg hover:shadow-saffron/20 transition-shadow duration-300 bg-background/95 backdrop-blur-md">
                       <div className="absolute -top-8 -right-8 h-24 w-24 rounded-full bg-saffron/10 group-hover:bg-saffron/30 transition duration-500" />
                       <div className="relative">
-                        <div className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-saffron to-saffron-deep text-primary-foreground shadow-md">
-                          <Icon size={20} />
+                        <div className="grid h-8 w-8 sm:h-11 sm:w-11 place-items-center rounded-lg sm:rounded-xl bg-gradient-to-br from-saffron to-saffron-deep text-primary-foreground shadow-md">
+                          <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                         </div>
-                        <h3 className="mt-4 font-display text-xl font-bold tracking-tight drop-shadow-sm text-foreground">{title}</h3>
-                        <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                        <h3 className="mt-2 sm:mt-4 font-display text-[13px] sm:text-xl font-bold tracking-tight drop-shadow-sm text-foreground leading-snug">{title}</h3>
+                        <p className="mt-1 sm:mt-2 text-[10px] sm:text-sm text-muted-foreground leading-relaxed">
                           {body}
                         </p>
                       </div>
