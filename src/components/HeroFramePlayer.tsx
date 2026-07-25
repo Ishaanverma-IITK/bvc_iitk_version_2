@@ -87,9 +87,9 @@ export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
         let focusPoint = 0.5;
 
         if (isMobile) {
-          // Centered book cover at frame 0 (focusPoint 0.5), smooth transition to Right page (focusPoint 0.9) by frame 120
+          // Centered book cover at frame 0 (focusPoint 0.5), smooth transition to Left page (focusPoint 0.1) by frame 120
           const t = Math.min(1, frameIndex / 120);
-          focusPoint = 0.5 - (0.5 - 0.9) * t;
+          focusPoint = 0.5 - (0.5 - 0.1) * t;
 
           // Scale image so that the page fits within the screen width with safety padding
           const bookWidthRatio = 0.35;
