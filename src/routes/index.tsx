@@ -197,16 +197,19 @@ function Home() {
       const vRatio = Math.max(0, Math.min(1, scrollY / (height * 2)));
       setVideoRatio(vRatio);
 
-      // Mobile: about fades in right after the video ends (~1.538x vh).
-      // Desktop: unchanged — starts at 2.5x vh.
-      const aboutStart = isMobile ? height * 1.6 : height * 2.5;
+      // On mobile, the video finishes scrubbing at scrollY ≈ height * (2/1.3) ≈ height * 1.538.
+      // Originally the about overlay started at height * 2.5, giving a "last frame persists"
+      // gap of ≈ height * 0.962. We reduce this gap to 60% on mobile:
+      //   new gap = 0.962 * 0.6 * height ≈ 0.577 * height
+      //   new about start = 1.538 + 0.577 = 2.115 * height
+      // Desktop keeps the original 2.5 * height start.
+      const aboutStart = isMobile ? height * 2.115 : height * 2.5;
       const aRatio = Math.max(0, Math.min(1, (scrollY - aboutStart) / height));
       setAboutRatio(aRatio);
 
       // Video slowly brightens (overlay goes from 0.7 to 0) during scroll,
       // and dims back down as the About overlay fades in.
-      const videoEndThreshold = isMobile ? height * 1.538 : height * 2;
-      if (scrollY < videoEndThreshold) {
+      if (scrollY < height * 2) {
         setOverlayOpacity((1 - vRatio) * 0.7);
       } else {
         setOverlayOpacity(aRatio * 0.9);
@@ -231,7 +234,7 @@ function Home() {
 
     <>
       {/* HERO SCROLL PINNING CONTAINER */}
-      <div id="hero" className="relative h-[272vh] sm:h-[450vh] bg-black">
+      <div id="hero" className="relative h-[450vh] bg-black">
 
         {/* HERO */}
         <section className="sticky top-0 h-screen flex items-center overflow-hidden w-full">
