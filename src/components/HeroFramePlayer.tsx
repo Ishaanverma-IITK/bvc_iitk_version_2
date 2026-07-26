@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import bvcLogo from "@/assets/bvc-logo.png";
 
 interface HeroFramePlayerProps {
   overlayOpacity?: number;
@@ -178,14 +179,30 @@ export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
   return (
     <div className="absolute inset-0 w-full h-full overflow-hidden bg-black pointer-events-none z-0">
       {!loaded && (
-        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black gap-4 text-cream">
-          <div className="relative w-16 h-16 flex items-center justify-center">
-            <div className="absolute inset-0 rounded-full border-4 border-saffron/20 border-t-saffron animate-spin" />
-            <span className="text-xs font-semibold text-saffron">{progress}%</span>
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-navy gap-6">
+          {/* Branded logo with glowing pulse ring */}
+          <div className="relative flex items-center justify-center">
+            <span className="absolute h-24 w-24 rounded-full bg-saffron/20 animate-ping" style={{ animationDuration: "1.8s" }} />
+            <span className="absolute h-20 w-20 rounded-full bg-saffron/10 blur-md" />
+            <img
+              src={bvcLogo}
+              alt="BVC IIT Kanpur"
+              className="relative h-20 w-20 rounded-full bg-white/10 object-contain ring-2 ring-saffron/40 shadow-glow"
+            />
           </div>
-          <p className="text-sm font-semibold tracking-wider uppercase text-cream/70 animate-pulse">
-            Loading background...
-          </p>
+
+          {/* Progress bar */}
+          <div className="flex flex-col items-center gap-2 w-48">
+            <div className="w-full h-1 rounded-full bg-cream/10 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-saffron to-saffron-deep transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-cream/50">
+              Loading · {progress}%
+            </p>
+          </div>
         </div>
       )}
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />

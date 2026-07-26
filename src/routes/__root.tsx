@@ -4,15 +4,18 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useLocation,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
+import { BackToTop } from "../components/BackToTop";
 
 function NotFoundComponent() {
   return (
@@ -79,22 +82,26 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "test_project" },
+      { title: "BVCIITK — Bhaktivedanta Club IIT Kanpur" },
       {
         name: "description",
         content:
-          "BVCIITK Website Insights analyzes the bvciitk.github.io repository and its live website.",
+          "Bhaktivedanta Club IIT Kanpur — where science meets spirituality. Explore Bhagavad Gita wisdom, Japa meditation, and holistic student life at IIT Kanpur.",
       },
       { name: "author", content: "Bhaktivedanta Club IIT Kanpur" },
-      { property: "og:title", content: "test_project" },
+      { property: "og:title", content: "BVCIITK — Bhaktivedanta Club IIT Kanpur" },
       {
         property: "og:description",
-        content: "BVCIITK Website Insights analyzes the bvciitk.github.io repository and its live website.",
+        content:
+          "Where Science Meets Spirituality. Bhaktivedanta Club bridges timeless Vedic wisdom with the scientific temper of IIT Kanpur.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "test_project" },
-      { name: "twitter:description", content: "BVCIITK Website Insights analyzes the bvciitk.github.io repository and its live website." },
+      { name: "twitter:title", content: "BVCIITK — Bhaktivedanta Club IIT Kanpur" },
+      {
+        name: "twitter:description",
+        content: "Where Science Meets Spirituality at IIT Kanpur.",
+      },
       { property: "og:image", content: "https://bvciitk.com/images/cover.jpg" },
       { name: "twitter:image", content: "https://bvciitk.com/images/cover.jpg" },
     ],
@@ -120,6 +127,12 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en" suppressHydrationWarning>
       <head suppressHydrationWarning>
         <HeadContent />
+        {/* Anti-flash script: sets dark class before React hydrates to prevent white flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('bvc-theme');if(t==='dark'||(t===null&&matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');}}catch(e){}})();`,
+          }}
+        />
       </head>
       <body suppressHydrationWarning>
         {children}
@@ -131,14 +144,26 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const { pathname } = useLocation();
 
   return (
     <QueryClientProvider client={queryClient}>
       <Navbar />
-      <main className="min-h-screen" suppressHydrationWarning>
-        <Outlet />
-      </main>
+      <AnimatePresence mode="wait">
+        <motion.main
+          key={pathname}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.25, ease: "easeInOut" }}
+          className="min-h-screen"
+          suppressHydrationWarning
+        >
+          <Outlet />
+        </motion.main>
+      </AnimatePresence>
       <Footer />
+      <BackToTop />
     </QueryClientProvider>
   );
 }

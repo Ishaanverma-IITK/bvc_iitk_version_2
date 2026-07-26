@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Brain,
   Sparkles,
@@ -22,22 +22,65 @@ import { ParallaxBackground } from "../components/ParallaxBackground";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "test_project" },
+      { title: "BVCIITK — Bhaktivedanta Club IIT Kanpur" },
       {
         name: "description",
         content:
-          "BVCIITK Website Insights analyzes the bvciitk.github.io repository and its live website.",
+          "Bhaktivedanta Club IIT Kanpur — where science meets spirituality. Explore Bhagavad Gita wisdom, Japa meditation, and holistic student life at IIT Kanpur.",
       },
-      { property: "og:title", content: "test_project" },
+      { property: "og:title", content: "BVCIITK — Bhaktivedanta Club IIT Kanpur" },
       {
         property: "og:description",
-        content: "BVCIITK Website Insights analyzes the bvciitk.github.io repository and its live website.",
+        content: "Where Science Meets Spirituality. Bhaktivedanta Club bridges timeless Vedic wisdom with the scientific temper of IIT Kanpur.",
       },
       { property: "og:image", content: "https://bvciitk.com/images/cover.jpg" },
     ],
   }),
   component: Home,
 });
+
+// --------------- Animated stat counter ---------------
+function StatCard({ value, suffix, label }: { value: number; suffix: string; label: string }) {
+  const [count, setCount] = useState(0);
+  const [triggered, setTriggered] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setTriggered(true); },
+      { threshold: 0.4 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!triggered) return;
+    const startTime = Date.now();
+    const duration = 1800;
+    const frame = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // easeOutCubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(eased * value));
+      if (progress < 1) requestAnimationFrame(frame);
+      else setCount(value);
+    };
+    requestAnimationFrame(frame);
+  }, [triggered, value]);
+
+  return (
+    <div ref={ref} className="flex flex-col items-center gap-2">
+      <span className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-gradient-saffron tabular-nums">
+        {count.toLocaleString()}{suffix}
+      </span>
+      <span className="text-xs sm:text-sm text-muted-foreground font-medium tracking-wide text-center">{label}</span>
+    </div>
+  );
+}
 
 
 const philosophyItems = [
@@ -182,6 +225,7 @@ const alumni = [
 ];
 
 function Home() {
+  const HERO_FALLBACK = "https://bvciitk.com/images/cover.jpg";
   const [selectedAlumnus, setSelectedAlumnus] = useState<typeof alumni[0] | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
   const [videoRatio, setVideoRatio] = useState(0);
@@ -362,6 +406,22 @@ function Home() {
         </section>
       </div>
 
+      {/* STATS COUNTER */}
+      <section className="py-16 sm:py-24 bg-gradient-to-b from-background via-accent/10 to-background">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Reveal className="text-center mb-12">
+            <span className="text-xs uppercase tracking-[0.2em] text-saffron font-semibold">By the Numbers</span>
+            <h2 className="mt-2 font-display text-3xl sm:text-4xl font-bold">20+ Years of <span className="text-gradient-saffron">Impact</span></h2>
+          </Reveal>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12">
+            <StatCard value={20}   suffix="+" label="Years of Spiritual Service" />
+            <StatCard value={1000} suffix="+" label="Janmashtami Visitors" />
+            <StatCard value={100}  suffix="+" label="Alumni Network" />
+            <StatCard value={4}    suffix=""  label="Annual Flagship Events" />
+          </div>
+        </div>
+      </section>
+
       {/* EVENTS */}
       <section id="events" className="py-24 sm:py-32 bg-gradient-to-b from-background to-accent/30">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -392,6 +452,7 @@ function Home() {
                       <img
                         src={ev.image}
                         alt={ev.title}
+                        loading="lazy"
                         onError={(e) =>
                           ((e.target as HTMLImageElement).src = HERO_FALLBACK)
                         }

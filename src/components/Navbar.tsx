@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import bvcLogo from "@/assets/bvc-logo.png";
-
-
+import { useTheme } from "../hooks/useTheme";
 
 const links = [
   { label: "About", to: "/", hash: "hero" },
@@ -21,6 +20,7 @@ export function Navbar() {
   const location = useLocation();
   const isHome = location.pathname === "/";
   const isDarkNavbar = isHome && !scrolled;
+  const { isDark, toggleTheme } = useTheme();
 
   useEffect(() => {
     const onScroll = () => {
@@ -53,6 +53,10 @@ export function Navbar() {
     }
     setOpen(false);
   };
+
+  const themeButtonClass = isDarkNavbar
+    ? "border-cream/20 text-cream hover:bg-cream/10"
+    : "border-border text-foreground hover:bg-accent";
 
   return (
     <header
@@ -96,7 +100,38 @@ export function Navbar() {
           ))}
         </ul>
 
-        <div className="hidden lg:block">
+        <div className="hidden lg:flex items-center gap-2">
+          {/* Dark / Light mode toggle */}
+          <button
+            onClick={toggleTheme}
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            className={`h-9 w-9 flex items-center justify-center rounded-full border transition-all duration-300 ${themeButtonClass}`}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {isDark ? (
+                <motion.span
+                  key="sun"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Sun size={16} />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="moon"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Moon size={16} />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
+
           <Link
             to="/contact"
             className="inline-flex items-center rounded-full bg-gradient-to-r from-saffron to-saffron-deep px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow hover:brightness-110 transition"
@@ -139,6 +174,16 @@ export function Navbar() {
                   </Link>
                 </li>
               ))}
+              {/* Theme toggle row in mobile menu */}
+              <li>
+                <button
+                  onClick={() => { toggleTheme(); setOpen(false); }}
+                  className="w-full flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-foreground hover:bg-saffron/10 hover:text-saffron transition"
+                >
+                  {isDark ? <Sun size={16} /> : <Moon size={16} />}
+                  {isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                </button>
+              </li>
               <li className="p-2">
                 <Link
                   to="/contact"
