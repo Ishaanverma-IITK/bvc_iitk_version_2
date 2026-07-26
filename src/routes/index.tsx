@@ -192,14 +192,21 @@ function Home() {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const height = window.innerHeight;
+      const isMobile = window.innerWidth < 768;
+
       const vRatio = Math.max(0, Math.min(1, scrollY / (height * 2)));
       setVideoRatio(vRatio);
-      const aRatio = Math.max(0, Math.min(1, (scrollY - height * 2.5) / height));
+
+      // Mobile: about fades in right after the video ends (~1.538x vh).
+      // Desktop: unchanged — starts at 2.5x vh.
+      const aboutStart = isMobile ? height * 1.6 : height * 2.5;
+      const aRatio = Math.max(0, Math.min(1, (scrollY - aboutStart) / height));
       setAboutRatio(aRatio);
 
       // Video slowly brightens (overlay goes from 0.7 to 0) during scroll,
       // and dims back down as the About overlay fades in.
-      if (scrollY < height * 2) {
+      const videoEndThreshold = isMobile ? height * 1.538 : height * 2;
+      if (scrollY < videoEndThreshold) {
         setOverlayOpacity((1 - vRatio) * 0.7);
       } else {
         setOverlayOpacity(aRatio * 0.9);
