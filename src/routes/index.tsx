@@ -192,7 +192,7 @@ function Home() {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const height = window.innerHeight;
-      const isMobile = window.innerWidth < 768;
+      const isMobile = window.innerWidth < 1024;
 
       const vRatio = Math.max(0, Math.min(1, scrollY / (height * 2)));
       setVideoRatio(vRatio);

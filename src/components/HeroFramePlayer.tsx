@@ -23,7 +23,7 @@ export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
 
   // Preload frames — on mobile load every 2nd frame to save memory & speed up loading
   useEffect(() => {
-    const isMobile = window.innerWidth < 768;
+    const isMobile = window.innerWidth < 1024;
     const totalFrames = 200;
     const step = isMobile ? 2 : 1;
     const framesToLoad = Math.ceil(totalFrames / step);
@@ -86,7 +86,7 @@ export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
         drawWidth = canvasHeight * imgRatio;
         drawHeight = canvasHeight;
 
-        const isMobile = window.innerWidth < 768;
+        const isMobile = window.innerWidth < 1024;
         let scale = 1.0;
         let focusPoint = 0.5;
 
@@ -145,7 +145,7 @@ export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
       const scrollY = window.scrollY;
       const height = window.innerHeight;
       // Mobile scrubs 1.3x faster (shorter scroll distance to complete the sequence)
-      const scrollMultiplier = window.innerWidth < 768 ? 2 / 1.3 : 2;
+      const scrollMultiplier = window.innerWidth < 1024 ? 2 / 1.3 : 2;
       const rawRatio = Math.max(0, Math.min(1, scrollY / (height * scrollMultiplier)));
       // Apply ease to the scroll ratio for a more organic feel
       const ratio = easeInOutCubic(rawRatio);
