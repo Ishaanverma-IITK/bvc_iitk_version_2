@@ -224,7 +224,7 @@ function Home() {
 
     <>
       {/* HERO SCROLL PINNING CONTAINER */}
-      <div id="hero" className="relative h-[450vh] bg-black">
+      <div id="hero" className="relative h-[272vh] sm:h-[450vh] bg-black">
 
         {/* HERO */}
         <section className="sticky top-0 h-screen flex items-center overflow-hidden w-full">
