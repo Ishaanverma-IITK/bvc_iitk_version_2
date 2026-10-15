@@ -14,7 +14,8 @@ export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [progress, setProgress] = useState(0);
   const [loaded, setLoaded] = useState(false);
-  const imagesRef = useRef<HTMLImageElement[]>([]);
+  const imagesRef = useRef<(HTMLImageElement | null)[]>([]);
+  const loadedIndicesRef = useRef<Set<number>>(new Set());
 
   // Lerp state — currentFrame floats between frames for sub-frame smoothness
   const currentFrameRef = useRef<number>(0);
@@ -22,32 +23,92 @@ export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
   const rafRef = useRef<number>(0);
   const isRunningRef = useRef<boolean>(false);
 
-  // Preload frames — on mobile load every 2nd frame to save memory & speed up loading
+  // Progressive Priority Loading (Optimized for bandwidth and instant paint)
   useEffect(() => {
+    let isCancelled = false;
     const isMobile = window.innerWidth < 1024;
     const totalFrames = 200;
+    // Mobile loads every 2nd frame (100 frames), desktop loads all 200
     const step = isMobile ? 2 : 1;
-    const framesToLoad = Math.ceil(totalFrames / step);
-    let loadedCount = 0;
-    const images: HTMLImageElement[] = [];
+    const frameIndices: number[] = [];
 
     for (let i = 1; i <= totalFrames; i += step) {
-      const img = new Image();
-      const frameNum = String(i).padStart(3, "0");
-      img.src = `/hero-frames/ezgif-frame-${frameNum}.jpg`;
-      img.onload = () => {
-        loadedCount++;
-        setProgress(Math.floor((loadedCount / framesToLoad) * 100));
-        if (loadedCount > 5) setLoaded(true);
-      };
-      img.onerror = () => {
-        loadedCount++;
-        setProgress(Math.floor((loadedCount / framesToLoad) * 100));
-        if (loadedCount > 5) setLoaded(true);
-      };
-      images.push(img);
+      frameIndices.push(i);
     }
+
+    const totalImages = frameIndices.length;
+    const images: (HTMLImageElement | null)[] = new Array(totalImages).fill(null);
     imagesRef.current = images;
+
+    let loadedCount = 0;
+
+    const loadSingleFrame = (indexInArray: number, frameNumber: number): Promise<void> => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        const frameNum = String(frameNumber).padStart(3, "0");
+        img.src = `/hero-frames/ezgif-frame-${frameNum}.jpg`;
+
+        const onDone = () => {
+          if (isCancelled) return;
+          images[indexInArray] = img;
+          loadedIndicesRef.current.add(indexInArray);
+          loadedCount++;
+          setProgress(Math.floor((loadedCount / totalImages) * 100));
+
+          // Allow interaction early once initial critical frames are ready
+          if (loadedCount >= Math.min(6, totalImages)) {
+            setLoaded(true);
+          }
+          resolve();
+        };
+
+        img.onload = onDone;
+        img.onerror = onDone;
+      });
+    };
+
+    // Priority 1: Load initial 15 frames immediately
+    const priorityCount = Math.min(15, totalImages);
+    const priorityPromises: Promise<void>[] = [];
+
+    for (let i = 0; i < priorityCount; i++) {
+      priorityPromises.push(loadSingleFrame(i, frameIndices[i]));
+    }
+
+    // Priority 2: Incrementally stream remaining frames in batches of 10
+    Promise.all(priorityPromises).then(() => {
+      if (isCancelled) return;
+      let nextIndex = priorityCount;
+
+      const loadNextBatch = () => {
+        if (isCancelled || nextIndex >= totalImages) return;
+        const batchEnd = Math.min(nextIndex + 10, totalImages);
+        const batchPromises: Promise<void>[] = [];
+
+        for (let i = nextIndex; i < batchEnd; i++) {
+          batchPromises.push(loadSingleFrame(i, frameIndices[i]));
+        }
+
+        nextIndex = batchEnd;
+
+        Promise.all(batchPromises).then(() => {
+          if (!isCancelled && nextIndex < totalImages) {
+            // Use idle callback or short timeout to preserve UI responsiveness
+            if ("requestIdleCallback" in window) {
+              window.requestIdleCallback(() => loadNextBatch(), { timeout: 300 });
+            } else {
+              setTimeout(loadNextBatch, 50);
+            }
+          }
+        });
+      };
+
+      loadNextBatch();
+    });
+
+    return () => {
+      isCancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -60,11 +121,24 @@ export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
 
     const totalImages = imagesRef.current.length;
 
+    // Helper: Find nearest loaded image to prevent empty flicker
+    const getNearestLoadedImage = (targetIndex: number): HTMLImageElement | null => {
+      if (imagesRef.current[targetIndex]) return imagesRef.current[targetIndex];
+
+      // Search backward first, then forward
+      for (let offset = 1; offset < totalImages; offset++) {
+        const back = targetIndex - offset;
+        if (back >= 0 && imagesRef.current[back]) return imagesRef.current[back];
+        const fwd = targetIndex + offset;
+        if (fwd < totalImages && imagesRef.current[fwd]) return imagesRef.current[fwd];
+      }
+      return null;
+    };
+
     // ---------- draw ----------
     const drawFrame = (frameFloat: number) => {
-      // Round to nearest integer frame
       const frameIndex = Math.max(0, Math.min(totalImages - 1, Math.round(frameFloat)));
-      const img = imagesRef.current[frameIndex];
+      const img = getNearestLoadedImage(frameIndex);
       if (!img) return;
 
       const imgWidth = img.naturalWidth || img.width;
@@ -114,15 +188,13 @@ export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
     };
 
     // ---------- Apple-style continuous lerp loop ----------
-    // Lerp speed: 0.08 = slow/cinematic, 0.14 = snappy. 0.10 is sweet spot.
     const LERP_SPEED = 0.10;
-    const STOP_THRESHOLD = 0.02; // stop loop when close enough
+    const STOP_THRESHOLD = 0.02;
 
     const loop = () => {
       const diff = targetFrameRef.current - currentFrameRef.current;
 
       if (Math.abs(diff) < STOP_THRESHOLD) {
-        // Snap to target and stop looping to save CPU
         currentFrameRef.current = targetFrameRef.current;
         drawFrame(currentFrameRef.current);
         isRunningRef.current = false;
@@ -141,14 +213,12 @@ export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
       }
     };
 
-    // ---------- scroll handler (only updates target, loop does the drawing) ----------
+    // ---------- scroll handler ----------
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const height = window.innerHeight;
-      // Mobile scrubs 1.3x faster (shorter scroll distance to complete the sequence)
       const scrollMultiplier = window.innerWidth < 1024 ? 2 / 1.3 : 2;
       const rawRatio = Math.max(0, Math.min(1, scrollY / (height * scrollMultiplier)));
-      // Apply ease to the scroll ratio for a more organic feel
       const ratio = easeInOutCubic(rawRatio);
       targetFrameRef.current = ratio * (totalImages - 1);
       startLoop();
@@ -157,14 +227,12 @@ export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
     const handleResize = () => {
       canvas.width = canvas.parentElement?.clientWidth || window.innerWidth;
       canvas.height = canvas.parentElement?.clientHeight || window.innerHeight;
-      // Force redraw at current frame after resize
       drawFrame(currentFrameRef.current);
     };
 
     window.addEventListener("resize", handleResize, { passive: true });
     window.addEventListener("scroll", handleScroll, { passive: true });
 
-    // Initial paint
     handleResize();
     drawFrame(0);
 
@@ -180,9 +248,11 @@ export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
     <div className="absolute inset-0 w-full h-full overflow-hidden bg-black pointer-events-none z-0">
       {!loaded && (
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-navy gap-6">
-          {/* Branded logo with glowing pulse ring */}
           <div className="relative flex items-center justify-center">
-            <span className="absolute h-24 w-24 rounded-full bg-saffron/20 animate-ping" style={{ animationDuration: "1.8s" }} />
+            <span
+              className="absolute h-24 w-24 rounded-full bg-saffron/20 animate-ping"
+              style={{ animationDuration: "1.8s" }}
+            />
             <span className="absolute h-20 w-20 rounded-full bg-saffron/10 blur-md" />
             <img
               src={bvcLogo}
@@ -191,7 +261,6 @@ export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
             />
           </div>
 
-          {/* Progress bar */}
           <div className="flex flex-col items-center gap-2 w-48">
             <div className="w-full h-1 rounded-full bg-cream/10 overflow-hidden">
               <div
@@ -206,7 +275,6 @@ export function HeroFramePlayer({ overlayOpacity = 0 }: HeroFramePlayerProps) {
         </div>
       )}
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
-      {/* Gradient overlays */}
       <div
         className="absolute inset-0 bg-gradient-to-r from-navy/95 via-navy/60 to-transparent pointer-events-none"
         style={{ opacity: overlayOpacity * 0.9 }}

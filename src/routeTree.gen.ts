@@ -10,14 +10,22 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TeamRouteImport } from './routes/team'
+import { Route as JanmashtamiRouteImport } from './routes/janmashtami'
 import { Route as GitanushilanamRouteImport } from './routes/gitanushilanam'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AlumniRouteImport } from './routes/alumni'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as JanmashtamiGalleryRouteImport } from './routes/janmashtami_.gallery'
+import { Route as JanmashtamiContactRouteImport } from './routes/janmashtami_.contact'
 
 const TeamRoute = TeamRouteImport.update({
   id: '/team',
   path: '/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JanmashtamiRoute = JanmashtamiRouteImport.update({
+  id: '/janmashtami',
+  path: '/janmashtami',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GitanushilanamRoute = GitanushilanamRouteImport.update({
@@ -40,20 +48,36 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JanmashtamiGalleryRoute = JanmashtamiGalleryRouteImport.update({
+  id: '/janmashtami_/gallery',
+  path: '/janmashtami/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JanmashtamiContactRoute = JanmashtamiContactRouteImport.update({
+  id: '/janmashtami_/contact',
+  path: '/janmashtami/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/alumni': typeof AlumniRoute
   '/contact': typeof ContactRoute
   '/gitanushilanam': typeof GitanushilanamRoute
+  '/janmashtami': typeof JanmashtamiRoute
   '/team': typeof TeamRoute
+  '/janmashtami/contact': typeof JanmashtamiContactRoute
+  '/janmashtami/gallery': typeof JanmashtamiGalleryRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/alumni': typeof AlumniRoute
   '/contact': typeof ContactRoute
   '/gitanushilanam': typeof GitanushilanamRoute
+  '/janmashtami': typeof JanmashtamiRoute
   '/team': typeof TeamRoute
+  '/janmashtami/contact': typeof JanmashtamiContactRoute
+  '/janmashtami/gallery': typeof JanmashtamiGalleryRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -61,14 +85,42 @@ export interface FileRoutesById {
   '/alumni': typeof AlumniRoute
   '/contact': typeof ContactRoute
   '/gitanushilanam': typeof GitanushilanamRoute
+  '/janmashtami': typeof JanmashtamiRoute
   '/team': typeof TeamRoute
+  '/janmashtami_/contact': typeof JanmashtamiContactRoute
+  '/janmashtami_/gallery': typeof JanmashtamiGalleryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/alumni' | '/contact' | '/gitanushilanam' | '/team'
+  fullPaths:
+    | '/'
+    | '/alumni'
+    | '/contact'
+    | '/gitanushilanam'
+    | '/janmashtami'
+    | '/team'
+    | '/janmashtami/contact'
+    | '/janmashtami/gallery'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/alumni' | '/contact' | '/gitanushilanam' | '/team'
-  id: '__root__' | '/' | '/alumni' | '/contact' | '/gitanushilanam' | '/team'
+  to:
+    | '/'
+    | '/alumni'
+    | '/contact'
+    | '/gitanushilanam'
+    | '/janmashtami'
+    | '/team'
+    | '/janmashtami/contact'
+    | '/janmashtami/gallery'
+  id:
+    | '__root__'
+    | '/'
+    | '/alumni'
+    | '/contact'
+    | '/gitanushilanam'
+    | '/janmashtami'
+    | '/team'
+    | '/janmashtami_/contact'
+    | '/janmashtami_/gallery'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,7 +128,10 @@ export interface RootRouteChildren {
   AlumniRoute: typeof AlumniRoute
   ContactRoute: typeof ContactRoute
   GitanushilanamRoute: typeof GitanushilanamRoute
+  JanmashtamiRoute: typeof JanmashtamiRoute
   TeamRoute: typeof TeamRoute
+  JanmashtamiContactRoute: typeof JanmashtamiContactRoute
+  JanmashtamiGalleryRoute: typeof JanmashtamiGalleryRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -86,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/team'
       fullPath: '/team'
       preLoaderRoute: typeof TeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/janmashtami': {
+      id: '/janmashtami'
+      path: '/janmashtami'
+      fullPath: '/janmashtami'
+      preLoaderRoute: typeof JanmashtamiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/gitanushilanam': {
@@ -116,6 +178,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/janmashtami_/gallery': {
+      id: '/janmashtami_/gallery'
+      path: '/janmashtami/gallery'
+      fullPath: '/janmashtami/gallery'
+      preLoaderRoute: typeof JanmashtamiGalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/janmashtami_/contact': {
+      id: '/janmashtami_/contact'
+      path: '/janmashtami/contact'
+      fullPath: '/janmashtami/contact'
+      preLoaderRoute: typeof JanmashtamiContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -124,7 +200,10 @@ const rootRouteChildren: RootRouteChildren = {
   AlumniRoute: AlumniRoute,
   ContactRoute: ContactRoute,
   GitanushilanamRoute: GitanushilanamRoute,
+  JanmashtamiRoute: JanmashtamiRoute,
   TeamRoute: TeamRoute,
+  JanmashtamiContactRoute: JanmashtamiContactRoute,
+  JanmashtamiGalleryRoute: JanmashtamiGalleryRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -16,6 +16,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { BackToTop } from "../components/BackToTop";
+import { Toaster } from "sonner";
 
 function NotFoundComponent() {
   return (
@@ -111,7 +112,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Cinzel:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap",
       },
       { rel: "icon", href: "https://bvciitk.com/images/logo.png", type: "image/png" },
     ],
@@ -129,6 +130,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
         {/* Anti-flash script: sets dark class before React hydrates to prevent white flash */}
         <script
+          suppressHydrationWarning
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem('bvc-theme');if(t==='dark'||(t===null&&matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');}}catch(e){}})();`,
           }}
@@ -145,10 +147,12 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const { pathname } = useLocation();
+  const isJanmashtami = pathname.startsWith("/janmashtami");
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Navbar />
+      <Toaster richColors position="top-right" />
+      {!isJanmashtami && <Navbar />}
       <AnimatePresence mode="wait">
         <motion.main
           key={pathname}
@@ -162,8 +166,8 @@ function RootComponent() {
           <Outlet />
         </motion.main>
       </AnimatePresence>
-      <Footer />
-      <BackToTop />
+      {!isJanmashtami && <Footer />}
+      {!isJanmashtami && <BackToTop />}
     </QueryClientProvider>
   );
 }

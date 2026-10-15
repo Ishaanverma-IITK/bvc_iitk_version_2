@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Reveal } from "../components/Reveal";
 import { TiltCard3D } from "../components/ui/TiltCard3D";
+import { AlumniAvatar } from "../components/AlumniAvatar";
 
 export const Route = createFileRoute("/team")({
   head: () => ({
@@ -15,7 +16,7 @@ export const Route = createFileRoute("/team")({
       {
         property: "og:description",
         content:
-          "Undergraduates from Y20, Y21, Y22 and Y23 leading the Bhaktivedanta Club at IIT Kanpur.",
+          "Undergraduates leading the Bhaktivedanta Club at IIT Kanpur.",
       },
     ],
   }),
@@ -32,67 +33,10 @@ type Member = {
 };
 
 const photo = (file: string) =>
-  `https://bvciitk.com/team/photos/${encodeURIComponent(file)}`;
+  `/images/team/${encodeURIComponent(file)}`;
 
 const team: Member[] = [
-  // Y20 — Seniors
-  {
-    name: "Jayesh Omprakash Lakade",
-    degree: "BS",
-    dept: "Economics",
-    year: "Y20",
-    roll: "200475",
-    photo: photo("Jayesh Omprakash Lakade.jpg"),
-  },
-  {
-    name: "Ayush Agrawal",
-    degree: "BTech",
-    dept: "Aerospace Engineering",
-    year: "Y20",
-    roll: "200237",
-    photo: photo("ayush  agrawall.jpg"),
-  },
   // Y21
-  {
-    name: "Ankit Khandelwal",
-    degree: "BTech",
-    dept: "Electrical Engineering",
-    year: "Y21",
-    roll: "210149",
-    photo: photo("Ankit Khandelwal.jpg"),
-  },
-  {
-    name: "Chirayush Mohanty",
-    degree: "BTech",
-    dept: "Computer Science and Engineering",
-    year: "Y21",
-    roll: "210289",
-    photo: photo("Chirayush Mohanty.jpg"),
-  },
-  {
-    name: "Sabyasachi Mohanta",
-    degree: "BS",
-    dept: "Statistics and Data Science",
-    year: "Y21",
-    roll: "210887",
-    photo: photo("Sabyasachi Mohanta.jpg"),
-  },
-  {
-    name: "Chandaka Hemanth Kumar",
-    degree: "BTech",
-    dept: "Computer Science and Engineering",
-    year: "Y21",
-    roll: "210277",
-    photo: photo("Chandaka Hemanth Kumar.jpg"),
-  },
-  {
-    name: "Anu Pal",
-    degree: "BTech",
-    dept: "Mechanical Engineering",
-    year: "Y21",
-    roll: "210160",
-    photo: photo("Anu Pal.jpg"),
-  },
   {
     name: "Chitresh Meena",
     degree: "BS",
@@ -100,31 +44,6 @@ const team: Member[] = [
     year: "Y21",
     roll: "210291",
     photo: photo("Chitresh Meena.jpg"),
-  },
-  // Y22
-  {
-    name: "Saagar K V",
-    degree: "BTech",
-    dept: "Electrical Engineering",
-    year: "Y22",
-    roll: "220927",
-    photo: photo("Saagar K V.jpg"),
-  },
-  {
-    name: "Saraswat",
-    degree: "BTech",
-    dept: "Mechanical Engineering",
-    year: "Y22",
-    roll: "220974",
-    photo: photo("Saraswat.jpg"),
-  },
-  {
-    name: "Bhavya Garg",
-    degree: "BTech",
-    dept: "Biological Sciences and Bioengineering",
-    year: "Y22",
-    roll: "220296",
-    photo: photo("Bhavya Garg.jpg"),
   },
   // Y23
   {
@@ -169,23 +88,11 @@ const team: Member[] = [
   },
 ];
 
-const batches = ["Y20", "Y21", "Y22", "Y23"] as const;
+const batches = ["Y21", "Y23"] as const;
 const batchLabels: Record<(typeof batches)[number], string> = {
-  Y20: "Batch of 2020",
   Y21: "Batch of 2021",
-  Y22: "Batch of 2022",
   Y23: "Batch of 2023",
 };
-
-function initials(name: string) {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase();
-}
 
 function MemberCard({ m, i }: { m: Member; i: number }) {
   return (
@@ -193,26 +100,12 @@ function MemberCard({ m, i }: { m: Member; i: number }) {
       <TiltCard3D className="h-full">
         <div className="group h-full rounded-2xl bg-card border border-border overflow-hidden shadow-sm transition-shadow duration-300 hover:shadow-saffron/20 bg-background/50 backdrop-blur-sm">
           <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-saffron/15 to-navy/10">
-            <img
+            <AlumniAvatar
               src={m.photo}
-              alt={m.name}
-              loading="lazy"
-              onError={(e) => {
-                const img = e.currentTarget;
-                img.style.display = "none";
-                const fallback = img.nextElementSibling as HTMLElement | null;
-                if (fallback) fallback.style.display = "grid";
-              }}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              name={m.name}
+              className="h-full w-full rounded-none transition-transform duration-500 group-hover:scale-105"
+              textClassName="text-4xl font-bold font-display"
             />
-            <div
-              style={{ display: "none" }}
-              className="absolute inset-0 place-items-center bg-gradient-to-br from-saffron to-saffron-deep"
-            >
-              <span className="font-display text-4xl font-bold text-primary-foreground">
-                {initials(m.name)}
-              </span>
-            </div>
             <span className="absolute top-3 left-3 rounded-full bg-background/85 backdrop-blur px-2.5 py-1 text-[10px] font-semibold tracking-wider text-saffron">
               {m.year}
             </span>
@@ -250,10 +143,10 @@ function TeamPage() {
               {team.length} members
             </span>
             <span className="rounded-full border border-border bg-card px-3 py-1 font-semibold text-foreground/80">
-              4 batches
+              {new Set(team.map((m) => m.year)).size} batches
             </span>
             <span className="rounded-full border border-border bg-card px-3 py-1 font-semibold text-foreground/80">
-              12+ departments
+              {new Set(team.map((m) => m.dept)).size} departments
             </span>
           </div>
         </Reveal>

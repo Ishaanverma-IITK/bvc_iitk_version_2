@@ -90,6 +90,16 @@ export function Footer() {
         <div>
           <h4 className="font-display text-lg mb-4 text-saffron">Quick Links</h4>
           <ul className="space-y-2 text-sm">
+            <li>
+              <Link
+                to="/janmashtami"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-saffron transition-colors font-medium text-saffron"
+              >
+                Janmashtami Festival ↗
+              </Link>
+            </li>
             <li><Link to="/" hash="events" className="hover:text-saffron transition-colors">Gallery</Link></li>
             <li><Link to="/gitanushilanam" className="hover:text-saffron transition-colors">Gitanushilanam</Link></li>
             <li><Link to="/team" className="hover:text-saffron transition-colors">Team</Link></li>

@@ -18,6 +18,8 @@ import { Reveal } from "../components/Reveal";
 import { HeroFramePlayer } from "../components/HeroFramePlayer";
 import { TiltCard3D } from "../components/ui/TiltCard3D";
 import { ParallaxBackground } from "../components/ParallaxBackground";
+import { AlumniAvatar } from "../components/AlumniAvatar";
+import { VerseOfTheDay } from "../components/VerseOfTheDay";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -112,7 +114,6 @@ const events = [
     tag: "Annual Flagship",
     image: "/images/portfolio/Janmashtami (1).jpg",
     body: "1000+ visitors, cultural performances, kirtan, interschool competitions, and free prasadam dinner across the campus.",
-    href: "/events",
     icon: Music,
   },
   {
@@ -128,7 +129,6 @@ const events = [
     tag: "Signature Festivals",
     image: "/images/portfolio/Spiritual Retreats (1) (1) (1).jpg",
     body: "Special festival celebrations, mass Gita recitations, abhishek, kirtan, and community retreats to holy places.",
-    href: "/events",
     icon: Award,
   },
   {
@@ -136,7 +136,6 @@ const events = [
     tag: "Social Service",
     image: "/images/portfolio/Welfarework.jpeg",
     body: "Selfless community service, including extensive prasadam distribution and running community kitchens during critical times.",
-    href: "/events",
     icon: Heart,
   },
   {
@@ -144,7 +143,6 @@ const events = [
     tag: "Seminars",
     image: "/images/portfolio/Personality Development (1).jpg",
     body: "Seminars and workshops focusing on life skills, mind control, and developing a balanced lifestyle for students.",
-    href: "/events",
     icon: Brain,
   },
   {
@@ -152,7 +150,6 @@ const events = [
     tag: "Robotics & AI",
     image: "/images/portfolio/Leading Edge Research.jpg",
     body: "Cutting-edge research in robotics and AI presented at international conferences like ICRA, exploring the science of consciousness.",
-    href: "/events",
     icon: Sparkles,
   },
 ];
@@ -261,6 +258,27 @@ function Home() {
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleHashScroll = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (!hash) return;
+      setTimeout(() => {
+        if (hash === "hero") {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+          const el = document.getElementById(hash);
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth" });
+          }
+        }
+      }, 250);
+    };
+
+    handleHashScroll();
+    window.addEventListener("hashchange", handleHashScroll);
+    return () => window.removeEventListener("hashchange", handleHashScroll);
   }, []);
 
   useEffect(() => {
@@ -422,6 +440,9 @@ function Home() {
         </div>
       </section>
 
+      {/* VERSE OF THE DAY */}
+      <VerseOfTheDay />
+
       {/* EVENTS */}
       <section id="events" className="py-24 sm:py-32 bg-gradient-to-b from-background to-accent/30">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -438,6 +459,17 @@ function Home() {
               BVC also conducts Institute level lecture series on Bhagavad Gita and daily Mantra Meditation Classes.
               Our Melodious Kirtans, delicious prasadam and divinely intoxicating retreats are loved by all.
             </p>
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <Link
+                to="/janmashtami"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-saffron to-saffron-deep px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow hover:scale-105 transition-all"
+              >
+                <Sparkles size={16} />
+                <span>Explore Janmashtami '26 Experience ↗</span>
+              </Link>
+            </div>
           </Reveal>
 
           <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -468,7 +500,7 @@ function Home() {
                       <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">
                         {ev.body}
                       </p>
-                      {ev.href !== "/events" && (
+                      {ev.href && (
                         <Link
                           to={ev.href}
                           className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-saffron group/link"
@@ -518,14 +550,11 @@ function Home() {
                       onClick={() => setSelectedAlumnus(a)}
                       className="flex gap-4 rounded-2xl bg-card border border-border p-5 cursor-pointer hover:border-saffron/40 hover:shadow-saffron/10 shadow-sm transition-all duration-300 h-full"
                     >
-                      <img
+                      <AlumniAvatar
                         src={a.photo}
-                        alt={a.name}
-                        onError={(e) => {
-                          const t = e.target as HTMLImageElement;
-                          t.style.display = "none";
-                        }}
-                        className="h-16 w-16 shrink-0 rounded-full object-cover bg-muted"
+                        name={a.name}
+                        className="h-16 w-16 rounded-full border border-border"
+                        textClassName="text-base font-bold"
                       />
                       <div className="min-w-0 flex-1">
                         <h3 className="font-semibold text-foreground truncate">{a.name}</h3>
@@ -600,13 +629,11 @@ function Home() {
               <X size={18} />
             </button>
 
-            <img
+            <AlumniAvatar
               src={selectedAlumnus.photo}
-              alt={selectedAlumnus.name}
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.display = "none";
-              }}
-              className="h-32 w-32 md:h-40 md:w-40 rounded-2xl object-cover bg-muted border border-border shrink-0 self-center md:self-start"
+              name={selectedAlumnus.name}
+              className="h-32 w-32 md:h-40 md:w-40 rounded-2xl border border-border shrink-0 self-center md:self-start"
+              textClassName="text-4xl font-bold"
             />
 
             <div className="flex-1 min-w-0">

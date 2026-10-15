@@ -7,8 +7,9 @@ import { useTheme } from "../hooks/useTheme";
 
 const links = [
   { label: "About", to: "/", hash: "hero" },
-  { label: "Gallery", to: "/", hash: "events" },
+  { label: "Janmashtami", to: "/janmashtami", newTab: true },
   { label: "Gitanushilanam", to: "/gitanushilanam" },
+  { label: "Gallery", to: "/", hash: "events" },
   { label: "Team", to: "/team" },
   { label: "Alumni", to: "/alumni" },
   { label: "Contact", to: "/contact" },
@@ -37,6 +38,10 @@ export function Navbar() {
   }, [isHome]);
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, l: typeof links[number]) => {
+    if ("newTab" in l && l.newTab) {
+      setOpen(false);
+      return;
+    }
     if (l.to === "/" && "hash" in l) {
       if (location.pathname === "/") {
         e.preventDefault();
@@ -87,6 +92,8 @@ export function Navbar() {
               <Link
                 to={l.to}
                 hash={"hash" in l ? l.hash : undefined}
+                target={"newTab" in l && l.newTab ? "_blank" : undefined}
+                rel={"newTab" in l && l.newTab ? "noopener noreferrer" : undefined}
                 onClick={(e) => handleLinkClick(e, l)}
                 className={`px-3 py-2 text-sm font-medium transition-colors relative after:absolute after:left-3 after:right-3 after:bottom-1 after:h-0.5 after:origin-left after:scale-x-0 after:bg-saffron after:transition-transform hover:after:scale-x-100 ${
                   isDarkNavbar
@@ -167,6 +174,8 @@ export function Navbar() {
                   <Link
                     to={l.to}
                     hash={"hash" in l ? l.hash : undefined}
+                    target={"newTab" in l && l.newTab ? "_blank" : undefined}
+                    rel={"newTab" in l && l.newTab ? "noopener noreferrer" : undefined}
                     onClick={(e) => handleLinkClick(e, l)}
                     className="block rounded-xl px-4 py-3 text-sm font-medium text-foreground hover:bg-saffron/10 hover:text-saffron transition"
                   >
